@@ -1,0 +1,18 @@
+{
+  "id": "mobile_store_001",
+  "name": "Mobile Store 001",
+  "packageName": "com.wstore.engine",
+  "modules": [
+    "customer",
+    "product",
+    "inventory",
+    "sales",
+    "warranty"
+  ],
+  "features": [
+    "imei",
+    "storage",
+    "color",
+    "warranty"
+  ]
+}
