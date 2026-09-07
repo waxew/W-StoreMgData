@@ -15,6 +15,8 @@ Core پروژه مستقل باقی می ماند و از این لایه است
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("com.google.devtools.ksp")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -28,6 +30,19 @@ android {
         versionCode = 1
         versionName = "1.0.0"
     }
+
+    buildFeatures {
+        compose = true
+    }
+}
+
+dependencies {
+    implementation("androidx.room:room-runtime:2.6.1")
+    implementation("androidx.room:room-ktx:2.6.1")
+    ksp("androidx.room:room-compiler:2.6.1")
+
+    implementation("com.google.dagger:hilt-android:2.52")
+    ksp("com.google.dagger:hilt-compiler:2.52")
 }
 
 kotlin {
