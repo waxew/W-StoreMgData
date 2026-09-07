@@ -1,17 +1,18 @@
 package com.wstore.engine.data.customer
 
+import javax.inject.Inject
+
 /**
  * پیاده سازی واقعی Repository مشتری.
  *
  * این کلاس نقطه اتصال بین منطق برنامه و منبع ذخیره اطلاعات است.
- * در این مرحله ساختار اولیه ایجاد شده تا بعد از اتصال Room Database
- * عملیات واقعی ذخیره و بازیابی اطلاعات انجام شود.
  *
- * نکته معماری:
- * این بخش نباید هیچ وابستگی به نوع کسب و کار داشته باشد.
- * اطلاعاتی مثل موبایل، بوتیک یا آرایشی از Business Profile تامین می‌شوند.
+ * در فاز ۱ وابستگی‌ها توسط Hilt تزریق می‌شوند تا لایه‌ها مستقل باقی بمانند.
+ *
+ * این بخش هیچ شناختی از نوع کسب و کار ندارد.
+ * اطلاعاتی مثل موبایل، بوتیک یا آرایشی فقط از Business Profile تامین می‌شوند.
  */
-class CustomerRepositoryImpl(
+class CustomerRepositoryImpl @Inject constructor(
     private val dataSource: CustomerDataSource
 ) : CustomerRepository {
 
