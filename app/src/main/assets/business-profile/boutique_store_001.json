@@ -1,0 +1,16 @@
+{
+  "id": "boutique_store_001",
+  "name": "Boutique Store 001",
+  "packageName": "com.wstore.engine",
+  "modules": [
+    "customer",
+    "product",
+    "inventory",
+    "sales"
+  ],
+  "features": [
+    "size",
+    "color",
+    "material"
+  ]
+}
