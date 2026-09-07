@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+================================================
+نام فایل: AndroidManifest.xml
+وظیفه:
+تعریف ساختار اصلی اپلیکیشن اندروید.
+
+این فایل فقط تنظیمات اجرای برنامه را نگهداری می‌کند.
+اطلاعات کسب‌وکار مانند نام فروشگاه و برند از Business Profile خوانده می‌شود.
+================================================
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application
+        android:theme="@style/Theme.WStoreEngine"
+        android:label="W Store Engine">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
+
+    </application>
+
+</manifest>
