@@ -5,17 +5,28 @@ package com.wstore.engine.data.database
 نام فایل: AppDatabase.kt
 
 وظیفه:
-تعریف نقطه اتصال دیتابیس برنامه.
+تعریف دیتابیس اصلی برنامه.
 
-این فایل متعلق به لایه Data است و هیچ اطلاعاتی از نوع کسب و کار ندارد.
+این فایل فقط مسئول اتصال لایه Data به ذخیره سازی داخلی است.
+هیچ وابستگی به نوع کسب و کار ندارد.
 
-مواردی مثل موبایل، بوتیک، سالن یا هر کسب و کار دیگر
-نباید در این لایه قرار بگیرد.
-
-داده ها توسط Core و Business Profile مدیریت می شوند.
+Business Profile و Attribute Engine مشخص می کنند
+چه داده هایی در برنامه فعال باشند.
 ====================================================
 */
 
-// در مرحله بعد با Room Database تکمیل می شود.
-// این ساختار برای آماده سازی معماری دیتابیس ایجاد شده است.
-class AppDatabase
+import androidx.room.Database
+import androidx.room.RoomDatabase
+import com.wstore.engine.data.database.dao.CustomerDao
+import com.wstore.engine.data.database.entity.CustomerRoomEntity
+
+@Database(
+    entities = [CustomerRoomEntity::class],
+    version = 1,
+    exportSchema = true
+)
+abstract class AppDatabase : RoomDatabase() {
+
+    // دسترسی به اطلاعات مشتری
+    abstract fun customerDao(): CustomerDao
+}
