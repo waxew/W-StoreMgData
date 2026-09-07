@@ -1,0 +1,16 @@
+{
+  "id": "beauty_store_001",
+  "name": "Beauty Store 001",
+  "packageName": "com.wstore.engine",
+  "modules": [
+    "customer",
+    "product",
+    "inventory",
+    "sales"
+  ],
+  "features": [
+    "brand",
+    "volume",
+    "expiration"
+  ]
+}
