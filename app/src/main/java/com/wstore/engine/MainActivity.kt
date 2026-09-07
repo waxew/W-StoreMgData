@@ -8,18 +8,25 @@ MainActivity.kt
 وظیفه:
 نقطه شروع اجرای برنامه اندروید.
 
-در نسخه نهایی:
-1- Business Profile فعال بارگذاری می‌شود.
-2- Module های فعال شناسایی می‌شوند.
-3- UI بر اساس تنظیمات کسب‌وکار ساخته می‌شود.
+این فایل فقط مسئول راه‌اندازی UI است.
+منطق کسب‌وکار، مشتری، محصول و فروش در اینجا قرار نمی‌گیرد.
 
-این فایل نباید شامل منطق کسب‌وکار باشد.
+جریان اجرا:
+MainActivity
+    ↓
+AppTheme
+    ↓
+AppNavigation
+    ↓
+Screens
 ================================================
 */
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import com.wstore.engine.ui.navigation.AppNavigation
+import com.wstore.engine.ui.theme.AppTheme
 
 class MainActivity : ComponentActivity() {
 
@@ -27,8 +34,12 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            // در مراحل بعد رابط کاربری اصلی اینجا متصل می‌شود.
-            // اطلاعات ظاهری از Business Profile دریافت خواهد شد.
+            // ظاهر برنامه از لایه Theme مدیریت می‌شود.
+            AppTheme {
+
+                // مدیریت مسیر صفحات برنامه در Navigation انجام می‌شود.
+                AppNavigation()
+            }
         }
     }
 }
