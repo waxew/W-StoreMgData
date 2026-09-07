@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+================================================
+نام فایل:
+styles.xml
+
+وظیفه:
+تعریف Theme پایه اندروید.
+
+در آینده Theme از Business Profile دریافت می‌شود
+تا هر نسخه ظاهر مستقل داشته باشد.
+================================================
+-->
+<resources>
+
+    <style name="Theme.WStoreEngine" parent="android:style/Theme.Material.Light.NoActionBar">
+        <item name="android:fontFamily">sans</item>
+    </style>
+
+</resources>
