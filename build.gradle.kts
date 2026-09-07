@@ -6,11 +6,14 @@ build.gradle.kts
 وظیفه:
 تنظیمات اصلی Gradle پروژه.
 
-نسخه های نهایی و پلاگین های اندروید در این لایه مدیریت می شوند.
+در این مرحله پلاگین های مورد نیاز برای زیرساخت برنامه
+فعال می شوند.
 ================================================
 */
 
 plugins {
     id("com.android.application") version "8.5.2" apply false
     id("org.jetbrains.kotlin.android") version "2.0.20" apply false
+    id("com.google.devtools.ksp") version "2.0.20-1.0.24" apply false
+    id("com.google.dagger.hilt.android") version "2.52" apply false
 }
