@@ -8,9 +8,6 @@ import com.wstore.engine.data.database.entity.CustomerRoomEntity
 
 /**
  * DAO واقعی Room برای مدیریت اطلاعات مشتری.
- *
- * این لایه فقط مسئول ارتباط با Database است.
- * هیچ اطلاعی از نوع کسب و کار ندارد.
  */
 @Dao
 interface CustomerDao {
