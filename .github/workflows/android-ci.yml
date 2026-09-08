@@ -32,15 +32,15 @@ jobs:
       - name: Clean
         run: ./gradlew clean
 
-      - name: Gradle Compile Check
-        run: ./gradlew compileDebugKotlin --stacktrace
-
       - name: Build Debug APK
         run: ./gradlew assembleDebug --stacktrace
+
+      - name: Check APK Output
+        run: ls -R app/build/outputs/apk
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: debug-apk
-          path: app/build/outputs/apk/debug/*.apk
+          path: app/build/outputs/apk/**/*.apk
           if-no-files-found: error
