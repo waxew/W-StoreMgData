@@ -27,13 +27,13 @@ jobs:
         run: chmod +x gradlew
 
       - name: Verify Gradle Wrapper
-        run: ./gradlew --version
+        run: gradle --no-daemon --version
 
       - name: Clean
-        run: ./gradlew clean
+        run: gradle --no-daemon clean
 
       - name: Build Debug APK
-        run: ./gradlew assembleDebug --stacktrace
+        run: gradle --no-daemon assembleDebug --stacktrace
 
       - name: Check APK Output
         run: ls -R app/build/outputs/apk
