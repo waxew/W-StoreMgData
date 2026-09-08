@@ -3,20 +3,23 @@
 نام فایل:
 app/build.gradle.kts
 
-وظیفه:
-تنظیمات ماژول اصلی اندروید.
-
-این ماژول خروجی APK نهایی را تولید می کند.
-
-Core پروژه مستقل باقی می ماند و از این لایه استفاده می شود.
+Android application module configuration.
 ================================================
 */
+
+import java.util.Properties
 
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
+}
+
+val versionProperties = Properties()
+val versionFile = rootProject.file("version.properties")
+if (versionFile.exists()) {
+    versionProperties.load(versionFile.inputStream())
 }
 
 android {
@@ -27,8 +30,24 @@ android {
         applicationId = "com.wstore.engine"
         minSdk = 26
         targetSdk = 35
-        versionCode = 1
-        versionName = "1.0.0"
+        versionCode = versionProperties.getProperty("VERSION_CODE", "10000").toInt()
+        versionName = versionProperties.getProperty("VERSION_NAME", "1.0.0")
+    }
+
+    signingConfigs {
+        create("release") {
+            storeFile = file(System.getenv("KEYSTORE_FILE") ?: "release.keystore")
+            storePassword = System.getenv("KEYSTORE_PASSWORD") ?: ""
+            keyAlias = System.getenv("KEY_ALIAS") ?: ""
+            keyPassword = System.getenv("KEY_PASSWORD") ?: ""
+        }
+    }
+
+    buildTypes {
+        release {
+            isMinifyEnabled = false
+            signingConfig = signingConfigs.getByName("release")
+        }
     }
 
     buildFeatures {
