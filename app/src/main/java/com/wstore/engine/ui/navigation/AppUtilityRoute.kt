@@ -13,6 +13,7 @@ sealed class AppUtilityRoute(
     data object Notifications : AppUtilityRoute("app/notifications", "اعلان‌ها")
     data object About : AppUtilityRoute("app/about", "درباره نرم‌افزار")
     data object Contact : AppUtilityRoute("app/contact", "تماس با ما")
+    data object Share : AppUtilityRoute("app/share", "معرفی به دوستان")
     data object Backup : AppUtilityRoute("app/backup", "پشتیبان‌گیری")
     data object Update : AppUtilityRoute("app/update", "بروزرسانی")
 
@@ -22,6 +23,7 @@ sealed class AppUtilityRoute(
             Notifications,
             About,
             Contact,
+            Share,
             Backup,
             Update
         )
