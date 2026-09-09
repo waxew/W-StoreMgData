@@ -1,6 +1,7 @@
 package com.wstore.engine.ui.navigation
 
 import com.wstore.engine.ui.customer.CustomerModule
+import com.wstore.engine.ui.inventory.InventoryModule
 
 /**
  * نام فایل: ModuleRouteRegistry.kt
@@ -15,6 +16,7 @@ object ModuleRouteRegistry {
         return when (moduleId) {
             "product" -> ScreenRoute.Product.route
             CustomerModule.ID -> CustomerModule.ROUTE
+            InventoryModule.ID -> InventoryModule.ROUTE
             else -> ScreenRoute.ModulePlaceholder.createRoute(moduleId)
         }
     }
