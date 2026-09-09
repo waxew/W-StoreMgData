@@ -4,14 +4,12 @@
 نام فایل: AndroidManifest.xml
 وظیفه:
 تعریف ساختار اصلی اپلیکیشن اندروید.
-
-این فایل فقط تنظیمات اجرای برنامه را نگهداری می‌کند.
-اطلاعات کسب‌وکار مانند نام فروشگاه و برند از Business Profile خوانده می‌شود.
 ================================================
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application
+        android:name=".WStoreApplication"
         android:theme="@style/Theme.WStoreEngine"
         android:label="W Store Engine">
 
