@@ -22,4 +22,6 @@ package com.wstore.engine.core.product
  */
 interface ProductRepository {
     fun getProducts(): List<ProductEntity>
+    fun save(product: ProductEntity)
+    fun delete(id: String)
 }
