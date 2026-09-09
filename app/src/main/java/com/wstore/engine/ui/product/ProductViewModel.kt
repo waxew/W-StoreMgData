@@ -2,6 +2,7 @@ package com.wstore.engine.ui.product
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.wstore.engine.data.local.entity.ProductEntity
 import com.wstore.engine.data.model.Product
 import com.wstore.engine.data.repository.ProductRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -30,6 +31,21 @@ class ProductViewModel @Inject constructor(
                     stock = it.stock
                 )
             }
+        }
+    }
+
+    fun addProduct(event: ProductEvent.AddProduct) {
+        viewModelScope.launch {
+            repository.add(
+                ProductEntity(
+                    name = event.name,
+                    code = event.code,
+                    category = event.category,
+                    price = event.price,
+                    stock = event.stock
+                )
+            )
+            loadProducts()
         }
     }
 }
