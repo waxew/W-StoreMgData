@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "id": "jewelry_store_001",
+  "enabled": false,
+  "identity": {
+    "name": "فروشگاه طلا و جواهر",
+    "businessType": "JEWELRY_STORE"
+  },
+  "modules": {
+    "customer": true,
+    "product": true,
+    "inventory": true,
+    "sales": true,
+    "invoice": true,
+    "reports": true
+  },
+  "features": {
+    "weight": true,
+    "purity": true,
+    "stone": true,
+    "serial": true,
+    "labor_fee": true
+  },
+  "attributes": [
+    {"key":"product.weight","label":"وزن","type":"decimal","required":true,"visible":true},
+    {"key":"product.purity","label":"عیار","type":"option","required":true,"visible":true,"options":["18","21","22","24"]},
+    {"key":"product.stone","label":"سنگ/نگین","type":"text","required":false,"visible":true},
+    {"key":"product.serial","label":"شماره سریال","type":"serial","required":false,"visible":true},
+    {"key":"product.labor_fee","label":"اجرت","type":"decimal","required":false,"visible":true}
+  ],
+  "uiProfile": {
+    "dashboardVariant": "jewelry_dashboard",
+    "productCardVariant": "jewelry_product_card",
+    "heroAssetKey": "jewelry_dashboard_hero",
+    "navigationVariant": "jewelry_navigation"
+  },
+  "theme": {
+    "name": "jewelry_luxury_theme",
+    "primaryToken": "jewelry_primary",
+    "backgroundToken": "jewelry_background",
+    "useDynamicColor": false
+  },
+  "assets": {
+    "iconKey": "jewelry_app_icon",
+    "logoKey": "jewelry_logo",
+    "dashboardHeroKey": "jewelry_dashboard_hero",
+    "emptyStateKey": "jewelry_empty_state"
+  }
+}
