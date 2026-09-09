@@ -26,10 +26,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.wstore.engine.data.model.Product
+import com.wstore.engine.profile.ProfileRuntimeStore
 
 /**
- * صفحه مدیریت کالا.
- * جستجو، ثبت، ویرایش و حذف کنترل‌شده از این صفحه انجام می‌شوند.
+ * نام فایل: ProductScreen.kt
+ * ماژول: Product UI
+ * وظیفه: مدیریت کالا و نمایش فرم پایه همراه با Attributeهای Business Profile فعال.
+ *
+ * این Screen نوع کسب‌وکار را Hard Code نمی‌کند؛ نام Profile و فیلدهای اختصاصی از Runtime خوانده می‌شوند.
  */
 @Composable
 fun ProductScreen(
@@ -38,7 +42,9 @@ fun ProductScreen(
     val products by viewModel.products.collectAsState()
     val query by viewModel.query.collectAsState()
     val editingProduct by viewModel.editingProduct.collectAsState()
+    val editingAttributeValues by viewModel.editingAttributeValues.collectAsState()
     val message by viewModel.message.collectAsState()
+    val activeProfile = remember { ProfileRuntimeStore.current() }
     var pendingDelete by remember { mutableStateOf<Product?>(null) }
 
     LaunchedEffect(Unit) {
@@ -50,7 +56,7 @@ fun ProductScreen(
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        Text("مدیریت کالا")
+        Text("مدیریت کالا — ${activeProfile.name}")
         Spacer(modifier = Modifier.height(8.dp))
 
         OutlinedTextField(
@@ -66,6 +72,8 @@ fun ProductScreen(
 
         AddProductForm(
             initialProduct = editingProduct,
+            dynamicAttributeDefinitions = viewModel.attributeDefinitions,
+            initialAttributeValues = editingAttributeValues,
             onSave = { form ->
                 val editing = editingProduct
                 if (editing == null) {
@@ -75,7 +83,8 @@ fun ProductScreen(
                             code = form.code,
                             category = form.category,
                             price = form.price,
-                            stock = form.stock
+                            stock = form.stock,
+                            attributes = form.attributes
                         )
                     )
                 } else {
@@ -85,7 +94,8 @@ fun ProductScreen(
                             name = form.name,
                             code = form.code,
                             category = form.category,
-                            price = form.price
+                            price = form.price,
+                            attributes = form.attributes
                         )
                     )
                 }
