@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "id": "grocery_store_001",
+  "enabled": false,
+  "identity": {
+    "name": "فروشگاه مواد غذایی",
+    "businessType": "GROCERY_STORE"
+  },
+  "modules": {
+    "customer": true,
+    "product": true,
+    "inventory": true,
+    "sales": true,
+    "invoice": true,
+    "reports": true
+  },
+  "features": {
+    "barcode": true,
+    "expiration": true,
+    "batch": true,
+    "unit": true,
+    "weight": true
+  },
+  "attributes": [
+    {"key":"product.barcode","label":"بارکد","type":"barcode","required":false,"visible":true},
+    {"key":"product.brand","label":"برند","type":"text","required":false,"visible":true},
+    {"key":"product.expiration","label":"تاریخ انقضا","type":"date","required":false,"visible":true},
+    {"key":"product.batch","label":"شماره بچ","type":"text","required":false,"visible":true},
+    {"key":"product.unit","label":"واحد فروش","type":"option","required":true,"visible":true,"options":["عدد","بسته","کیلوگرم","گرم","لیتر","میلی‌لیتر"]},
+    {"key":"product.weight","label":"وزن/حجم","type":"decimal","required":false,"visible":true}
+  ],
+  "uiProfile": {
+    "dashboardVariant": "grocery_dashboard",
+    "productCardVariant": "grocery_product_card",
+    "heroAssetKey": "grocery_dashboard_hero",
+    "navigationVariant": "grocery_navigation"
+  },
+  "theme": {
+    "name": "grocery_fresh_theme",
+    "primaryToken": "grocery_primary",
+    "backgroundToken": "grocery_background",
+    "useDynamicColor": false
+  },
+  "assets": {
+    "iconKey": "grocery_app_icon",
+    "logoKey": "grocery_logo",
+    "dashboardHeroKey": "grocery_dashboard_hero",
+    "emptyStateKey": "grocery_empty_state"
+  }
+}
