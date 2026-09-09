@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "id": "pet_store_001",
+  "enabled": false,
+  "identity": {
+    "name": "فروشگاه حیوانات خانگی",
+    "businessType": "PET_STORE"
+  },
+  "modules": {
+    "customer": true,
+    "product": true,
+    "inventory": true,
+    "sales": true,
+    "invoice": true,
+    "reports": true
+  },
+  "features": {
+    "animal_type": true,
+    "age_group": true,
+    "food_type": true,
+    "expiration": true,
+    "weight": true
+  },
+  "attributes": [
+    {"key":"product.animal_type","label":"نوع حیوان","type":"option","required":true,"visible":true,"options":["سگ","گربه","پرنده","ماهی","جوندگان","سایر"]},
+    {"key":"product.age_group","label":"گروه سنی","type":"option","required":false,"visible":true,"options":["نوزاد","جوان","بالغ","مسن","عمومی"]},
+    {"key":"product.food_type","label":"نوع خوراک/محصول","type":"text","required":false,"visible":true},
+    {"key":"product.brand","label":"برند","type":"text","required":false,"visible":true},
+    {"key":"product.expiration","label":"تاریخ انقضا","type":"date","required":false,"visible":true},
+    {"key":"product.weight","label":"وزن","type":"decimal","required":false,"visible":true}
+  ],
+  "uiProfile": {
+    "dashboardVariant": "pet_dashboard",
+    "productCardVariant": "pet_product_card",
+    "heroAssetKey": "pet_dashboard_hero",
+    "navigationVariant": "pet_navigation"
+  },
+  "theme": {
+    "name": "pet_friendly_theme",
+    "primaryToken": "pet_primary",
+    "backgroundToken": "pet_background",
+    "useDynamicColor": false
+  },
+  "assets": {
+    "iconKey": "pet_app_icon",
+    "logoKey": "pet_logo",
+    "dashboardHeroKey": "pet_dashboard_hero",
+    "emptyStateKey": "pet_empty_state"
+  }
+}
