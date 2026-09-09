@@ -7,12 +7,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.wstore.engine.ui.customer.CustomerModule
 import com.wstore.engine.ui.customer.customerRoute
 import com.wstore.engine.ui.dashboard.DashboardScreen
 import com.wstore.engine.ui.inventory.inventoryRoute
 import com.wstore.engine.ui.invoice.invoiceRoute
 import com.wstore.engine.ui.product.ProductScreen
 import com.wstore.engine.ui.product.ProductViewModel
+import com.wstore.engine.ui.sales.SalesModule
 import com.wstore.engine.ui.sales.salesRoute
 
 /**
@@ -43,9 +45,22 @@ fun AppNavHost() {
             ProductScreen(viewModel = viewModel)
         }
 
-        customerRoute()
+        customerRoute(
+            onCustomerSelected = { customerId ->
+                navController.navigate(CustomerModule.detailRoute(customerId))
+            },
+            onSaleSelected = { saleId ->
+                navController.navigate(SalesModule.detailRoute(saleId))
+            },
+            onBack = { navController.popBackStack() }
+        )
         inventoryRoute()
-        salesRoute()
+        salesRoute(
+            onSaleSelected = { saleId ->
+                navController.navigate(SalesModule.detailRoute(saleId))
+            },
+            onBack = { navController.popBackStack() }
+        )
         invoiceRoute()
 
         composable(
