@@ -20,7 +20,7 @@ Color = White
 ================================================
 */
 
-package core.product
+package com.wstore.engine.core.product
 
 /**
  * ارتباط بین محصول و ویژگی های پویا.
