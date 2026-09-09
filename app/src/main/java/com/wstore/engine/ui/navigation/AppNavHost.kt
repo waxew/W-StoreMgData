@@ -10,6 +10,7 @@ import androidx.navigation.navArgument
 import com.wstore.engine.ui.customer.CustomerModule
 import com.wstore.engine.ui.customer.customerRoute
 import com.wstore.engine.ui.dashboard.DashboardScreen
+import com.wstore.engine.ui.dashboard.DashboardViewModel
 import com.wstore.engine.ui.inventory.inventoryRoute
 import com.wstore.engine.ui.invoice.invoiceRoute
 import com.wstore.engine.ui.product.ProductScreen
@@ -33,9 +34,14 @@ fun AppNavHost() {
         startDestination = ScreenRoute.Dashboard.route
     ) {
         composable(ScreenRoute.Dashboard.route) {
+            val dashboardViewModel: DashboardViewModel = hiltViewModel()
             DashboardScreen(
+                viewModel = dashboardViewModel,
                 onModuleSelected = { moduleId ->
                     navController.navigate(ModuleRouteRegistry.routeFor(moduleId))
+                },
+                onSaleSelected = { saleId ->
+                    navController.navigate(SalesModule.detailRoute(saleId))
                 }
             )
         }
