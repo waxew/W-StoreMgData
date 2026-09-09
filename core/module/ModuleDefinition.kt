@@ -1,4 +1,4 @@
-package core.module
+package com.wstore.engine.core.module
 
 /*
 ================================================
