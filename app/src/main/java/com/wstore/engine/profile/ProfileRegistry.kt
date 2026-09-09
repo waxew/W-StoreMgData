@@ -8,23 +8,39 @@ ProfileRegistry.kt
 Business Profile Engine
 
 وظیفه:
-مدیریت لیست پروفایل‌های قابل استفاده برنامه.
+ثبت و دسترسی فقط‌خواندنی به Profileهای بارگذاری‌شده از Config.
+Registry هیچ Profile خاصی را Hard Code نمی‌کند و فقط روی قرارداد ProfileDefinition کار می‌کند.
 
-هدف:
-اضافه شدن کسب و کار جدید فقط با اضافه کردن Definition انجام شود و Core تغییر نکند.
+قانون:
+شناسه Profile باید یکتا باشد؛ وجود شناسه تکراری خطای پیکربندی محسوب می‌شود.
 */
 
 class ProfileRegistry(
-    private val profiles: List<ProfileDefinition>
+    profiles: List<ProfileDefinition>
 ) {
+    private val profilesById: Map<String, ProfileDefinition>
 
-    // فقط پروفایل‌هایی که توسط توسعه‌دهنده فعال شده‌اند برگردانده می‌شوند.
-    fun enabledProfiles(): List<ProfileDefinition> {
-        return profiles.filter { it.enabled }
+    init {
+        val duplicatedIds = profiles
+            .groupingBy { it.id }
+            .eachCount()
+            .filterValues { count -> count > 1 }
+            .keys
+
+        require(duplicatedIds.isEmpty()) {
+            "شناسه Profile تکراری است: ${duplicatedIds.joinToString()}"
+        }
+
+        profilesById = profiles.associateBy { it.id }
     }
 
-    // پیدا کردن یک پروفایل با شناسه یکتا.
-    fun findById(id: String): ProfileDefinition? {
-        return profiles.firstOrNull { it.id == id }
-    }
+    /** تمام Profileهای معتبر و بارگذاری‌شده را برمی‌گرداند. */
+    fun allProfiles(): List<ProfileDefinition> = profilesById.values.toList()
+
+    /** فقط Profileهایی را برمی‌گرداند که توسعه‌دهنده enabled=true کرده است. */
+    fun enabledProfiles(): List<ProfileDefinition> =
+        profilesById.values.filter { it.enabled }
+
+    /** پیدا کردن Profile با شناسه یکتا. */
+    fun findById(id: String): ProfileDefinition? = profilesById[id]
 }
