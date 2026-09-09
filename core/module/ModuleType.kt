@@ -21,7 +21,7 @@ Appointment
 ================================================
 */
 
-package com.wstoremgdata.core.module
+package com.wstore.engine.core.module
 
 /**
  * انواع کلی ماژول های سیستم

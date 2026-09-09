@@ -19,7 +19,7 @@ Core فقط Module را می شناسد، نه نوع کسب و کار را.
 ================================================
 */
 
-package com.wstoremgdata.core.module
+package com.wstore.engine.core.module
 
 /**
  * بارگذاری و بررسی فعال بودن قابلیت ها

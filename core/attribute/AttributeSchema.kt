@@ -19,7 +19,7 @@ Product در پوشاک می تواند Size و Material داشته باشد.
 ================================================
 */
 
-package com.wstoremgdata.core.attribute
+package com.wstore.engine.core.attribute
 
 /**
  * تعریف مجموعه ویژگی های قابل استفاده برای یک موجودیت

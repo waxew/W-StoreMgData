@@ -1,4 +1,4 @@
-package core.attribute
+package com.wstore.engine.core.attribute
 
 /*
 ================================================

@@ -15,7 +15,7 @@ Dynamic Attribute Engine
 ================================================
 */
 
-package com.wstoremgdata.core.attribute
+package com.wstore.engine.core.attribute
 
 /**
  * انواع داده قابل استفاده برای ویژگی های پویا

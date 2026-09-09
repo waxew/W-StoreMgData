@@ -13,7 +13,7 @@ ProductEntity.kt
 ================================================
 */
 
-package core.product
+package com.wstore.engine.core.product
 
 /**
  * موجودیت عمومی کالا.

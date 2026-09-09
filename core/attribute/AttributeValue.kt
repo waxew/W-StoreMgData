@@ -24,7 +24,7 @@ Value:
 ================================================
 */
 
-package com.wstoremgdata.core.attribute
+package com.wstore.engine.core.attribute
 
 /**
  * مقدار یک ویژگی پویا
