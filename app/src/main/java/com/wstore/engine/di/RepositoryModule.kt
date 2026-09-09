@@ -6,6 +6,7 @@ import com.wstore.engine.data.local.dao.InvoiceDao
 import com.wstore.engine.data.local.dao.ProductDao
 import com.wstore.engine.data.local.dao.SalesDao
 import com.wstore.engine.data.repository.CustomerRepository
+import com.wstore.engine.data.repository.DashboardRepository
 import com.wstore.engine.data.repository.InventoryRepository
 import com.wstore.engine.data.repository.InvoiceRepository
 import com.wstore.engine.data.repository.ProductRepository
@@ -59,5 +60,22 @@ object RepositoryModule {
         invoiceDao: InvoiceDao
     ): InvoiceRepository {
         return InvoiceRepository(invoiceDao)
+    }
+
+    /**
+     * DashboardRepository فقط Repositoryهای موجود را ترکیب می‌کند و به DAO مستقیم وابسته نیست.
+     */
+    @Provides
+    @Singleton
+    fun provideDashboardRepository(
+        customerRepository: CustomerRepository,
+        productRepository: ProductRepository,
+        salesRepository: SalesRepository
+    ): DashboardRepository {
+        return DashboardRepository(
+            customerRepository = customerRepository,
+            productRepository = productRepository,
+            salesRepository = salesRepository
+        )
     }
 }
