@@ -76,14 +76,13 @@ class InventoryViewModel @Inject constructor(
 
     private fun applyMovement(action: suspend () -> Unit) {
         viewModelScope.launch {
-            runCatching { action() }
-                .onSuccess {
-                    _error.value = null
-                    _products.value = repository.products()
-                }
-                .onFailure { throwable ->
-                    _error.value = throwable.message ?: "ثبت گردش موجودی انجام نشد."
-                }
+            try {
+                action()
+                _products.value = repository.products()
+                _error.value = null
+            } catch (throwable: Throwable) {
+                _error.value = throwable.message ?: "ثبت گردش موجودی انجام نشد."
+            }
         }
     }
 
