@@ -118,6 +118,60 @@ private val MIGRATION_3_4 = object : Migration(3, 4) {
     }
 }
 
+/**
+ * مهاجرت نسخه 4 به 5.
+ * جداول Invoice به‌صورت افزایشی اضافه می‌شوند و Product/Customer/Inventory/Sales حفظ می‌شوند.
+ */
+private val MIGRATION_4_5 = object : Migration(4, 5) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL(
+            """
+            CREATE TABLE IF NOT EXISTS `invoices` (
+                `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                `saleId` INTEGER NOT NULL,
+                `invoiceNumber` TEXT NOT NULL,
+                `customerNameSnapshot` TEXT NOT NULL,
+                `totalAmount` REAL NOT NULL,
+                `noteSnapshot` TEXT NOT NULL,
+                `saleCreatedAt` INTEGER NOT NULL,
+                `createdAt` INTEGER NOT NULL
+            )
+            """.trimIndent()
+        )
+        db.execSQL(
+            "CREATE UNIQUE INDEX IF NOT EXISTS `index_invoices_saleId` ON `invoices` (`saleId`)"
+        )
+        db.execSQL(
+            "CREATE INDEX IF NOT EXISTS `index_invoices_createdAt` ON `invoices` (`createdAt`)"
+        )
+
+        db.execSQL(
+            """
+            CREATE TABLE IF NOT EXISTS `invoice_items` (
+                `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                `invoiceId` INTEGER NOT NULL,
+                `saleItemId` INTEGER NOT NULL,
+                `productId` INTEGER NOT NULL,
+                `productNameSnapshot` TEXT NOT NULL,
+                `productCodeSnapshot` TEXT NOT NULL,
+                `quantity` INTEGER NOT NULL,
+                `unitPrice` REAL NOT NULL,
+                `lineTotal` REAL NOT NULL
+            )
+            """.trimIndent()
+        )
+        db.execSQL(
+            "CREATE INDEX IF NOT EXISTS `index_invoice_items_invoiceId` ON `invoice_items` (`invoiceId`)"
+        )
+        db.execSQL(
+            "CREATE INDEX IF NOT EXISTS `index_invoice_items_saleItemId` ON `invoice_items` (`saleItemId`)"
+        )
+        db.execSQL(
+            "CREATE INDEX IF NOT EXISTS `index_invoice_items_productId` ON `invoice_items` (`productId`)"
+        )
+    }
+}
+
 @Module
 @InstallIn(SingletonComponent::class)
 object DatabaseModule {
@@ -132,7 +186,12 @@ object DatabaseModule {
             AppDatabase::class.java,
             "wstore_database"
         )
-            .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4)
+            .addMigrations(
+                MIGRATION_1_2,
+                MIGRATION_2_3,
+                MIGRATION_3_4,
+                MIGRATION_4_5
+            )
             .build()
     }
 
@@ -155,4 +214,9 @@ object DatabaseModule {
     fun provideSalesDao(
         database: AppDatabase
     ) = database.salesDao()
+
+    @Provides
+    fun provideInvoiceDao(
+        database: AppDatabase
+    ) = database.invoiceDao()
 }
