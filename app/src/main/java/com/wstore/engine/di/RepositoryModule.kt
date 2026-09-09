@@ -6,11 +6,13 @@ import com.wstore.engine.data.local.dao.InvoiceDao
 import com.wstore.engine.data.local.dao.ProductAttributeDao
 import com.wstore.engine.data.local.dao.ProductDao
 import com.wstore.engine.data.local.dao.SalesDao
+import com.wstore.engine.data.local.database.AppDatabase
 import com.wstore.engine.data.repository.CustomerRepository
 import com.wstore.engine.data.repository.DashboardRepository
 import com.wstore.engine.data.repository.InventoryRepository
 import com.wstore.engine.data.repository.InvoiceRepository
 import com.wstore.engine.data.repository.ProductAttributeRepository
+import com.wstore.engine.data.repository.ProductProfileRepository
 import com.wstore.engine.data.repository.ProductRepository
 import com.wstore.engine.data.repository.ReportsRepository
 import com.wstore.engine.data.repository.SalesRepository
@@ -37,13 +39,30 @@ object RepositoryModule {
         return ProductRepository(dao)
     }
 
-    /** Repository جدا برای مقادیر Dynamic Attribute کالا. */
+    /** Repository جدا برای خواندن/نوشتن مقادیر Dynamic Attribute کالا. */
     @Provides
     @Singleton
     fun provideProductAttributeRepository(
         dao: ProductAttributeDao
     ): ProductAttributeRepository {
         return ProductAttributeRepository(dao)
+    }
+
+    /**
+     * Repository ترکیبی Product + Dynamic Attribute را در یک Room Transaction ذخیره می‌کند.
+     */
+    @Provides
+    @Singleton
+    fun provideProductProfileRepository(
+        database: AppDatabase,
+        productDao: ProductDao,
+        productAttributeRepository: ProductAttributeRepository
+    ): ProductProfileRepository {
+        return ProductProfileRepository(
+            database = database,
+            productDao = productDao,
+            attributeRepository = productAttributeRepository
+        )
     }
 
     @Provides
