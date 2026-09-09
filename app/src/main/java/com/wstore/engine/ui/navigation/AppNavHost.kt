@@ -15,6 +15,7 @@ import com.wstore.engine.ui.inventory.inventoryRoute
 import com.wstore.engine.ui.invoice.invoiceRoute
 import com.wstore.engine.ui.product.ProductScreen
 import com.wstore.engine.ui.product.ProductViewModel
+import com.wstore.engine.ui.reports.reportsRoute
 import com.wstore.engine.ui.sales.SalesModule
 import com.wstore.engine.ui.sales.salesRoute
 
@@ -68,6 +69,9 @@ fun AppNavHost() {
             onBack = { navController.popBackStack() }
         )
         invoiceRoute()
+        reportsRoute(
+            onBack = { navController.popBackStack() }
+        )
 
         composable(
             route = ScreenRoute.ModulePlaceholder.route,
