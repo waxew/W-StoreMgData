@@ -4,12 +4,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 
 @Composable
 fun ProductScreen(
     viewModel: ProductViewModel
 ) {
-    val products = viewModel.products
+    val products by viewModel.products.collectAsState()
 
     LaunchedEffect(Unit) {
         viewModel.loadProducts()
@@ -21,14 +23,20 @@ fun ProductScreen(
 
         AddProductForm(
             onSave = { product ->
-                viewModel.addProduct(product)
+                viewModel.addProduct(
+                    ProductEvent.AddProduct(
+                        name = product.name,
+                        code = product.code,
+                        category = product.category,
+                        price = product.price,
+                        stock = product.stock
+                    )
+                )
             }
         )
 
-        products.value.forEach { product ->
-            Text(
-                "${product.name} | ${product.stock}"
-            )
+        products.forEach { product ->
+            Text("${product.name} | ${product.stock}")
         }
     }
 }
