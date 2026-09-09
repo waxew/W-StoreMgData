@@ -1,34 +1,164 @@
 package com.wstore.engine.ui.dashboard
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.wstore.engine.runtime.RuntimeModuleService
 
 /**
- * نام فایل: DashboardScreen.kt
- * ماژول: Dashboard
- * وظیفه: نمایش ماژول‌های فعال Business Profile و ارسال انتخاب کاربر به Navigation.
+ * داشبورد مدیریتی برنامه.
  *
- * تصمیم فعال بودن Featureها از Runtime می‌آید و Routeها خارج از Dashboard مدیریت می‌شوند.
+ * ماژول‌های فعال همچنان از Runtime می‌آیند؛ آمار فقط از DashboardViewModel خوانده می‌شود.
+ * Dashboard هیچ عملیات نوشتنی روی Customer/Product/Sales/Inventory انجام نمی‌دهد.
  */
 @Composable
 fun DashboardScreen(
-    onModuleSelected: (String) -> Unit
+    viewModel: DashboardViewModel,
+    onModuleSelected: (String) -> Unit,
+    onSaleSelected: (Long) -> Unit
 ) {
+    val state by viewModel.uiState.collectAsState()
     val modules = RuntimeModuleService.getActiveModules()
 
-    Column(modifier = Modifier.padding(16.dp)) {
-        Text("W-StoreMgData Dashboard")
+    Column(
+        modifier = Modifier
+            .verticalScroll(rememberScrollState())
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp)
+    ) {
+        Text("داشبورد مدیریت فروشگاه")
+
+        if (state.isLoading) {
+            CircularProgressIndicator()
+        }
+
+        state.error?.let { message ->
+            Text(message)
+        }
+
+        DashboardKpiCard("مشتریان", state.customerCount.toString())
+        DashboardKpiCard("کالاها", state.productCount.toString())
+        DashboardKpiCard("تعداد فروش", state.salesCount.toString())
+        DashboardKpiCard("مجموع فروش", state.totalRevenue.toString())
+        DashboardKpiCard("کالاهای کم‌موجودی (۵ یا کمتر)", state.lowStockCount.toString())
+
+        Spacer(modifier = Modifier.height(4.dp))
+        HorizontalDivider()
+        Text("دسترسی سریع")
+
+        QuickAction(
+            moduleId = "product",
+            title = "مدیریت کالا",
+            activeModules = modules,
+            onModuleSelected = onModuleSelected
+        )
+        QuickAction(
+            moduleId = "customer",
+            title = "مدیریت مشتری",
+            activeModules = modules,
+            onModuleSelected = onModuleSelected
+        )
+        QuickAction(
+            moduleId = "sales",
+            title = "ثبت و مشاهده فروش",
+            activeModules = modules,
+            onModuleSelected = onModuleSelected
+        )
+        QuickAction(
+            moduleId = "invoice",
+            title = "فاکتورها",
+            activeModules = modules,
+            onModuleSelected = onModuleSelected
+        )
+
+        Spacer(modifier = Modifier.height(4.dp))
+        HorizontalDivider()
+        Text("فروش‌های اخیر")
+
+        if (!state.isLoading && state.recentSales.isEmpty()) {
+            Text("هنوز فروشی ثبت نشده است.")
+        }
+
+        state.recentSales.forEach { sale ->
+            Button(
+                onClick = { onSaleSelected(sale.id) },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    "فروش #${sale.id} | ${sale.customerName} | مبلغ: ${sale.totalAmount}"
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(4.dp))
+        HorizontalDivider()
+        Text("ماژول‌های فعال")
 
         modules.forEach { module ->
             DashboardModuleCard(
-                moduleName = module,
+                moduleName = moduleLabel(module),
                 onClick = { onModuleSelected(module) }
             )
         }
     }
+}
+
+@Composable
+private fun DashboardKpiCard(
+    title: String,
+    value: String
+) {
+    Card(modifier = Modifier.fillMaxWidth()) {
+        Row(
+            modifier = Modifier.padding(16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(title)
+            Text(value)
+        }
+    }
+}
+
+@Composable
+private fun QuickAction(
+    moduleId: String,
+    title: String,
+    activeModules: List<String>,
+    onModuleSelected: (String) -> Unit
+) {
+    if (moduleId in activeModules) {
+        Button(
+            onClick = { onModuleSelected(moduleId) },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(title)
+        }
+    }
+}
+
+private fun moduleLabel(moduleId: String): String = when (moduleId) {
+    "product" -> "کالاها"
+    "customer" -> "مشتریان"
+    "inventory" -> "موجودی"
+    "sales" -> "فروش"
+    "invoice" -> "فاکتورها"
+    "imei" -> "IMEI"
+    "warranty" -> "گارانتی"
+    else -> moduleId
 }
