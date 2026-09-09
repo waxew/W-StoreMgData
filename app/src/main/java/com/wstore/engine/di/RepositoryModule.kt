@@ -10,6 +10,7 @@ import com.wstore.engine.data.repository.DashboardRepository
 import com.wstore.engine.data.repository.InventoryRepository
 import com.wstore.engine.data.repository.InvoiceRepository
 import com.wstore.engine.data.repository.ProductRepository
+import com.wstore.engine.data.repository.ReportsRepository
 import com.wstore.engine.data.repository.SalesRepository
 import dagger.Module
 import dagger.Provides
@@ -76,6 +77,23 @@ object RepositoryModule {
             customerRepository = customerRepository,
             productRepository = productRepository,
             salesRepository = salesRepository
+        )
+    }
+
+    /**
+     * ReportsRepository یک Read Model روی لایه‌های موجود است و هیچ مسیر نوشتنی ایجاد نمی‌کند.
+     */
+    @Provides
+    @Singleton
+    fun provideReportsRepository(
+        salesRepository: SalesRepository,
+        productRepository: ProductRepository,
+        inventoryRepository: InventoryRepository
+    ): ReportsRepository {
+        return ReportsRepository(
+            salesRepository = salesRepository,
+            productRepository = productRepository,
+            inventoryRepository = inventoryRepository
         )
     }
 }
