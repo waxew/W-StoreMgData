@@ -4,6 +4,7 @@ import com.wstore.engine.data.local.dao.SalesDao
 import com.wstore.engine.data.local.entity.SaleEntity
 import com.wstore.engine.data.local.entity.SaleItemEntity
 import com.wstore.engine.data.model.SaleLineDraft
+import com.wstore.engine.data.model.TopSellingProduct
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -22,6 +23,9 @@ class SalesRepository(
 
     fun observeSaleItems(saleId: Long): Flow<List<SaleItemEntity>> =
         dao.observeSaleItems(saleId)
+
+    fun observeTopSellingProducts(limit: Int = 5): Flow<List<TopSellingProduct>> =
+        dao.observeTopSellingProducts(limit.coerceAtLeast(1))
 
     suspend fun createSale(
         customerId: Long?,
