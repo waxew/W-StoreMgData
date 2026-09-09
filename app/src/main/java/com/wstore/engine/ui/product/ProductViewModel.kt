@@ -20,7 +20,16 @@ class ProductViewModel @Inject constructor(
 
     fun loadProducts() {
         viewModelScope.launch {
-            _products.value = repository.getProducts()
+            _products.value = repository.products().map {
+                Product(
+                    id = it.id,
+                    name = it.name,
+                    code = it.code,
+                    category = it.category,
+                    price = it.price,
+                    stock = it.stock
+                )
+            }
         }
     }
 }
