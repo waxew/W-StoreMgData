@@ -28,3 +28,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "W-StoreMgData"
 include(":app")
+include(":core")
