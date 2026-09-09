@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "app": {
+    "name": "W Store Engine",
+    "applicationId": "com.wstore.engine",
+    "versionCode": 10000,
+    "versionName": "1.0.0",
+    "iconKey": "app_icon",
+    "logoKey": "app_logo"
+  },
+  "company": {
+    "name": "AS Team",
+    "displayName": "آکادمی آموزشی AS Team",
+    "logoKey": "as_team_logo",
+    "supportEmail": "AS.Developers.Support@Gmail.Com"
+  },
+  "startup": {
+    "logoMotionEnabled": true,
+    "durationMillis": 1500,
+    "animation": "fade_scale"
+  },
+  "ads": {
+    "enabled": true,
+    "showForGuest": true,
+    "showForExpiredSubscription": true,
+    "hideForVip": true,
+    "provider": "none",
+    "bannerEnabled": false,
+    "interstitialEnabled": false
+  },
+  "update": {
+    "enabled": true,
+    "checkOnStart": true,
+    "manifestUrl": "",
+    "showPopup": true,
+    "showNotificationBadge": true
+  },
+  "backup": {
+    "enabled": true,
+    "includeDatabase": true,
+    "includePreferences": true,
+    "includeUserFiles": true
+  },
+  "ui": {
+    "drawerEnabled": true,
+    "topBarEnabled": true,
+    "topBarCenterMode": "app_name",
+    "rootNavigationBackToHome": true
+  }
+}
