@@ -70,6 +70,54 @@ private val MIGRATION_2_3 = object : Migration(2, 3) {
     }
 }
 
+/**
+ * مهاجرت نسخه 3 به 4.
+ * ساختار Sales اضافه می‌شود و Product/Customer/Inventory دست‌نخورده باقی می‌مانند.
+ */
+private val MIGRATION_3_4 = object : Migration(3, 4) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL(
+            """
+            CREATE TABLE IF NOT EXISTS `sales` (
+                `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                `customerId` INTEGER,
+                `customerName` TEXT NOT NULL,
+                `totalAmount` REAL NOT NULL,
+                `note` TEXT NOT NULL,
+                `createdAt` INTEGER NOT NULL
+            )
+            """.trimIndent()
+        )
+        db.execSQL(
+            "CREATE INDEX IF NOT EXISTS `index_sales_customerId` ON `sales` (`customerId`)"
+        )
+        db.execSQL(
+            "CREATE INDEX IF NOT EXISTS `index_sales_createdAt` ON `sales` (`createdAt`)"
+        )
+
+        db.execSQL(
+            """
+            CREATE TABLE IF NOT EXISTS `sale_items` (
+                `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                `saleId` INTEGER NOT NULL,
+                `productId` INTEGER NOT NULL,
+                `productName` TEXT NOT NULL,
+                `productCode` TEXT NOT NULL,
+                `quantity` INTEGER NOT NULL,
+                `unitPrice` REAL NOT NULL,
+                `lineTotal` REAL NOT NULL
+            )
+            """.trimIndent()
+        )
+        db.execSQL(
+            "CREATE INDEX IF NOT EXISTS `index_sale_items_saleId` ON `sale_items` (`saleId`)"
+        )
+        db.execSQL(
+            "CREATE INDEX IF NOT EXISTS `index_sale_items_productId` ON `sale_items` (`productId`)"
+        )
+    }
+}
+
 @Module
 @InstallIn(SingletonComponent::class)
 object DatabaseModule {
@@ -84,7 +132,7 @@ object DatabaseModule {
             AppDatabase::class.java,
             "wstore_database"
         )
-            .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
+            .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4)
             .build()
     }
 
@@ -102,4 +150,9 @@ object DatabaseModule {
     fun provideInventoryDao(
         database: AppDatabase
     ) = database.inventoryDao()
+
+    @Provides
+    fun provideSalesDao(
+        database: AppDatabase
+    ) = database.salesDao()
 }
