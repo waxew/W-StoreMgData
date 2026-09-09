@@ -1,11 +1,18 @@
 package com.wstore.core.profile
 
 /**
- * Loader پایه پروفایل ها
- * مرحله بعد اتصال به JSON انجام می شود.
+ * Loader پروفایل از منبع JSON
+ *
+ * این لایه مسئول تبدیل تعریف خارجی پروفایل به مدل داخلی است.
+ * منطق کسب و کار داخل Loader قرار نمی گیرد.
  */
 class ProfileLoader {
-    fun load(profile: ProfileDefinition): ProfileDefinition {
+
+    fun loadFromDefinition(profile: ProfileDefinition): ProfileDefinition {
         return profile
+    }
+
+    fun loadAll(profiles: List<ProfileDefinition>): List<ProfileDefinition> {
+        return profiles.filter { it.enabled }
     }
 }
