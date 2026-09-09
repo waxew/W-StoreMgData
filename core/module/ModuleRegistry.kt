@@ -22,7 +22,7 @@ Advertisement
 ================================================
 */
 
-package com.wstoremgdata.core.module
+package com.wstore.engine.core.module
 
 /**
  * رجیستری مرکزی ماژول ها
