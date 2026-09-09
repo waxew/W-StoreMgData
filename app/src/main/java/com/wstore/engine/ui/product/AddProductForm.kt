@@ -16,17 +16,23 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.wstore.engine.data.model.Product
+import com.wstore.engine.profile.ProfileAttributeDefinition
 
 /**
- * داده فرم کالا در لایه UI.
- * Entity دیتابیس عمداً وارد Composable نمی‌شود.
+ * نام فایل: AddProductForm.kt
+ * ماژول: Product UI
+ * وظیفه: فرم مشترک ثبت و ویرایش کالا همراه با فیلدهای پایه و Attributeهای Profile فعال.
+ *
+ * Entity دیتابیس عمداً وارد Composable نمی‌شود. فیلدهای اختصاصی صنف نیز از Metadata
+ * دریافت می‌شوند و هیچ نام کسب‌وکار در این فایل Hard Code نشده است.
  */
 data class ProductFormData(
     val name: String,
     val code: String,
     val category: String,
     val price: Double,
-    val stock: Int
+    val stock: Int,
+    val attributes: Map<String, String> = emptyMap()
 )
 
 /**
@@ -36,6 +42,8 @@ data class ProductFormData(
 @Composable
 fun AddProductForm(
     initialProduct: Product? = null,
+    dynamicAttributeDefinitions: List<ProfileAttributeDefinition> = emptyList(),
+    initialAttributeValues: Map<String, String> = emptyMap(),
     onSave: (ProductFormData) -> Unit,
     onCancel: () -> Unit = {}
 ) {
@@ -47,6 +55,13 @@ fun AddProductForm(
     }
     var stock by remember(initialProduct?.id) {
         mutableStateOf(initialProduct?.stock?.toString().orEmpty())
+    }
+    var dynamicValues by remember(
+        initialProduct?.id,
+        initialAttributeValues,
+        dynamicAttributeDefinitions
+    ) {
+        mutableStateOf(initialAttributeValues)
     }
     var formError by remember(initialProduct?.id) { mutableStateOf<String?>(null) }
 
@@ -82,6 +97,17 @@ fun AddProductForm(
             label = { Text(if (isEditing) "موجودی (از Inventory تغییر می‌کند)" else "موجودی اولیه") }
         )
 
+        if (dynamicAttributeDefinitions.any { it.visible }) {
+            Text("مشخصات اختصاصی کسب‌وکار")
+            DynamicAttributeFields(
+                definitions = dynamicAttributeDefinitions,
+                values = dynamicValues,
+                onValueChange = { key, value ->
+                    dynamicValues = dynamicValues + (key to value)
+                }
+            )
+        }
+
         formError?.let { Text(it) }
 
         Row {
@@ -89,6 +115,10 @@ fun AddProductForm(
                 onClick = {
                     val parsedPrice = price.toDoubleOrNull()
                     val parsedStock = stock.toIntOrNull()
+                    val dynamicValidationError = validateDynamicAttributes(
+                        definitions = dynamicAttributeDefinitions,
+                        values = dynamicValues
+                    )
 
                     formError = when {
                         name.isBlank() -> "نام کالا الزامی است."
@@ -96,17 +126,25 @@ fun AddProductForm(
                         parsedPrice < 0.0 -> "قیمت کالا نمی‌تواند منفی باشد."
                         parsedStock == null -> "موجودی معتبر نیست."
                         parsedStock < 0 -> "موجودی نمی‌تواند منفی باشد."
+                        dynamicValidationError != null -> dynamicValidationError
                         else -> null
                     }
 
                     if (formError == null) {
+                        val normalizedAttributes = dynamicAttributeDefinitions
+                            .filter { it.visible }
+                            .associate { definition ->
+                                definition.key to dynamicValues[definition.key].orEmpty().trim()
+                            }
+
                         onSave(
                             ProductFormData(
                                 name = name.trim(),
                                 code = code.trim(),
                                 category = category.trim(),
                                 price = parsedPrice!!,
-                                stock = if (isEditing) initialProduct!!.stock else parsedStock!!
+                                stock = if (isEditing) initialProduct!!.stock else parsedStock!!,
+                                attributes = normalizedAttributes
                             )
                         )
 
@@ -116,6 +154,7 @@ fun AddProductForm(
                             category = ""
                             price = ""
                             stock = ""
+                            dynamicValues = emptyMap()
                         }
                     }
                 }
@@ -131,4 +170,36 @@ fun AddProductForm(
             }
         }
     }
+}
+
+/** اعتبارسنجی عمومی Attributeها بر اساس Schema و بدون شناخت صنف. */
+private fun validateDynamicAttributes(
+    definitions: List<ProfileAttributeDefinition>,
+    values: Map<String, String>
+): String? {
+    definitions.filter { it.visible }.forEach { definition ->
+        val value = values[definition.key].orEmpty().trim()
+
+        if (definition.required && value.isBlank()) {
+            return "فیلد «${definition.label}» الزامی است."
+        }
+        if (value.isBlank()) return@forEach
+
+        when (definition.type) {
+            "number" -> if (value.toLongOrNull() == null) {
+                return "مقدار «${definition.label}» باید عدد صحیح باشد."
+            }
+            "decimal" -> if (value.toDoubleOrNull() == null) {
+                return "مقدار «${definition.label}» باید عدد معتبر باشد."
+            }
+            "option" -> if (value !in definition.options) {
+                return "گزینه انتخاب‌شده برای «${definition.label}» معتبر نیست."
+            }
+            "boolean" -> if (value != "true" && value != "false") {
+                return "مقدار «${definition.label}» معتبر نیست."
+            }
+        }
+    }
+
+    return null
 }
