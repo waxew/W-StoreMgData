@@ -4,6 +4,7 @@ import com.wstore.engine.data.model.Product
 
 /**
  * رویدادهای UI ماژول کالا.
+ * موجودی فقط هنگام ایجاد کالا مقدار اولیه می‌گیرد؛ تغییرات بعدی موجودی از Inventory انجام می‌شوند.
  */
 sealed interface ProductEvent {
     data class AddProduct(
@@ -19,8 +20,7 @@ sealed interface ProductEvent {
         val name: String,
         val code: String,
         val category: String,
-        val price: Double,
-        val stock: Int
+        val price: Double
     ) : ProductEvent
 
     data class DeleteProduct(val product: Product) : ProductEvent
