@@ -2,6 +2,7 @@ package com.wstore.engine.ui.navigation
 
 import com.wstore.engine.ui.customer.CustomerModule
 import com.wstore.engine.ui.inventory.InventoryModule
+import com.wstore.engine.ui.invoice.InvoiceModule
 import com.wstore.engine.ui.sales.SalesModule
 
 /**
@@ -19,6 +20,7 @@ object ModuleRouteRegistry {
             CustomerModule.ID -> CustomerModule.ROUTE
             InventoryModule.ID -> InventoryModule.ROUTE
             SalesModule.ID -> SalesModule.ROUTE
+            InvoiceModule.ID -> InvoiceModule.ROUTE
             else -> ScreenRoute.ModulePlaceholder.createRoute(moduleId)
         }
     }

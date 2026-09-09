@@ -2,10 +2,12 @@ package com.wstore.engine.di
 
 import com.wstore.engine.data.local.dao.CustomerDao
 import com.wstore.engine.data.local.dao.InventoryDao
+import com.wstore.engine.data.local.dao.InvoiceDao
 import com.wstore.engine.data.local.dao.ProductDao
 import com.wstore.engine.data.local.dao.SalesDao
 import com.wstore.engine.data.repository.CustomerRepository
 import com.wstore.engine.data.repository.InventoryRepository
+import com.wstore.engine.data.repository.InvoiceRepository
 import com.wstore.engine.data.repository.ProductRepository
 import com.wstore.engine.data.repository.SalesRepository
 import dagger.Module
@@ -49,5 +51,13 @@ object RepositoryModule {
         salesDao: SalesDao
     ): SalesRepository {
         return SalesRepository(salesDao)
+    }
+
+    @Provides
+    @Singleton
+    fun provideInvoiceRepository(
+        invoiceDao: InvoiceDao
+    ): InvoiceRepository {
+        return InvoiceRepository(invoiceDao)
     }
 }
