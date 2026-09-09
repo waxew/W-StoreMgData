@@ -37,6 +37,8 @@ kotlin {
 }
 
 dependencies {
+    implementation(project(":core"))
+
     implementation("androidx.core:core-ktx:1.15.0")
     implementation("androidx.activity:activity-compose:1.10.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7")
