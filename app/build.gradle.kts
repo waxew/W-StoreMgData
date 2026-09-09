@@ -42,6 +42,7 @@ dependencies {
     implementation("androidx.core:core-ktx:1.15.0")
     implementation("androidx.activity:activity-compose:1.10.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7")
+    implementation("androidx.navigation:navigation-compose:2.8.5")
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
 
     implementation(platform("androidx.compose:compose-bom:2025.01.00"))
