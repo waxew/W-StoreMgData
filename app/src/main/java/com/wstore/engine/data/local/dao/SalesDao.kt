@@ -9,6 +9,7 @@ import com.wstore.engine.data.local.entity.ProductEntity
 import com.wstore.engine.data.local.entity.SaleEntity
 import com.wstore.engine.data.local.entity.SaleItemEntity
 import com.wstore.engine.data.model.SaleLineDraft
+import com.wstore.engine.data.model.TopSellingProduct
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -30,6 +31,14 @@ abstract class SalesDao {
 
     @Query("SELECT * FROM sale_items WHERE saleId = :saleId ORDER BY id ASC")
     abstract fun observeSaleItems(saleId: Long): Flow<List<SaleItemEntity>>
+
+    @Query(
+        "SELECT productId AS productId, productName AS productName, " +
+            "SUM(quantity) AS quantitySold, SUM(lineTotal) AS revenue " +
+            "FROM sale_items GROUP BY productId, productName " +
+            "ORDER BY quantitySold DESC, revenue DESC LIMIT :limit"
+    )
+    abstract fun observeTopSellingProducts(limit: Int): Flow<List<TopSellingProduct>>
 
     @Query("SELECT * FROM products WHERE id = :productId LIMIT 1")
     protected abstract suspend fun getProduct(productId: Long): ProductEntity?
