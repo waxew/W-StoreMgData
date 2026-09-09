@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "id": "mobile_store_001",
+  "enabled": true,
+  "identity": {
+    "name": "فروشگاه موبایل"
+  },
+  "modules": {
+    "customer": true,
+    "product": true,
+    "inventory": true,
+    "sales": true,
+    "invoice": true,
+    "reports": true
+  },
+  "features": {
+    "imei": true,
+    "warranty": true,
+    "size": false,
+    "expiration": false
+  },
+  "attributes": [
+    {
+      "key": "imei",
+      "type": "serial",
+      "visible": true
+    },
+    {
+      "key": "storage",
+      "type": "option",
+      "visible": true
+    }
+  ],
+  "uiProfile": {
+    "dashboard": "mobile_dashboard"
+  }
+}
