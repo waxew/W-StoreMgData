@@ -2,6 +2,7 @@ package com.wstore.engine.data.repository
 
 import com.wstore.engine.data.local.dao.CustomerDao
 import com.wstore.engine.data.local.entity.CustomerEntity
+import com.wstore.engine.data.model.CustomerDeleteResult
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -22,7 +23,17 @@ class CustomerRepository(
 
     suspend fun update(customer: CustomerEntity) = dao.update(customer)
 
-    suspend fun delete(customer: CustomerEntity) = dao.delete(customer)
+    suspend fun delete(customer: CustomerEntity): CustomerDeleteResult {
+        val current = dao.getById(customer.id) ?: return CustomerDeleteResult.NotFound
+        val saleReferences = dao.saleReferenceCount(current.id)
+
+        if (saleReferences > 0) {
+            return CustomerDeleteResult.BlockedBySalesHistory(saleReferences)
+        }
+
+        dao.delete(current)
+        return CustomerDeleteResult.Deleted
+    }
 
     suspend fun getById(id: Long): CustomerEntity? = dao.getById(id)
 }

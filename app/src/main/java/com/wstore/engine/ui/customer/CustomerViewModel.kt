@@ -3,6 +3,7 @@ package com.wstore.engine.ui.customer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.wstore.engine.data.local.entity.CustomerEntity
+import com.wstore.engine.data.model.CustomerDeleteResult
 import com.wstore.engine.data.repository.CustomerRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -124,8 +125,13 @@ class CustomerViewModel @Inject constructor(
         viewModelScope.launch {
             runCatching {
                 repository.delete(customer)
-            }.onSuccess {
-                _error.value = null
+            }.onSuccess { result ->
+                _error.value = when (result) {
+                    CustomerDeleteResult.Deleted -> null
+                    CustomerDeleteResult.NotFound -> "مشتری موردنظر دیگر در دیتابیس وجود ندارد."
+                    is CustomerDeleteResult.BlockedBySalesHistory ->
+                        "این مشتری ${result.saleReferences} سابقه فروش دارد و برای حفظ تاریخچه قابل حذف نیست."
+                }
             }.onFailure { throwable ->
                 _error.value = throwable.message ?: "حذف مشتری انجام نشد."
             }

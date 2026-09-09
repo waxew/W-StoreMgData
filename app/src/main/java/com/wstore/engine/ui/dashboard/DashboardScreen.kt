@@ -86,6 +86,12 @@ fun DashboardScreen(
             activeModules = modules,
             onModuleSelected = onModuleSelected
         )
+        QuickAction(
+            moduleId = "reports",
+            title = "گزارش‌های فروش و موجودی",
+            activeModules = modules,
+            onModuleSelected = onModuleSelected
+        )
 
         Spacer(modifier = Modifier.height(4.dp))
         HorizontalDivider()
@@ -158,6 +164,7 @@ private fun moduleLabel(moduleId: String): String = when (moduleId) {
     "inventory" -> "موجودی"
     "sales" -> "فروش"
     "invoice" -> "فاکتورها"
+    "reports" -> "گزارش‌ها"
     "imei" -> "IMEI"
     "warranty" -> "گارانتی"
     else -> moduleId

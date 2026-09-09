@@ -30,6 +30,9 @@ interface CustomerDao {
     @Query("SELECT * FROM customers WHERE id = :id LIMIT 1")
     fun observeById(id: Long): Flow<CustomerEntity?>
 
+    @Query("SELECT COUNT(*) FROM sales WHERE customerId = :customerId")
+    suspend fun saleReferenceCount(customerId: Long): Int
+
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun insert(customer: CustomerEntity): Long
 
