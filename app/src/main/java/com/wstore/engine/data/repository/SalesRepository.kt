@@ -17,6 +17,9 @@ class SalesRepository(
     fun observeSalesForCustomer(customerId: Long): Flow<List<SaleEntity>> =
         dao.observeSalesForCustomer(customerId)
 
+    fun observeSale(saleId: Long): Flow<SaleEntity?> =
+        dao.observeSale(saleId)
+
     fun observeSaleItems(saleId: Long): Flow<List<SaleItemEntity>> =
         dao.observeSaleItems(saleId)
 

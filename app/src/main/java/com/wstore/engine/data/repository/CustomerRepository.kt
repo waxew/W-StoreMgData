@@ -16,6 +16,8 @@ class CustomerRepository(
 
     fun searchCustomers(query: String): Flow<List<CustomerEntity>> = dao.search(query)
 
+    fun observeById(id: Long): Flow<CustomerEntity?> = dao.observeById(id)
+
     suspend fun add(customer: CustomerEntity): Long = dao.insert(customer)
 
     suspend fun update(customer: CustomerEntity) = dao.update(customer)
