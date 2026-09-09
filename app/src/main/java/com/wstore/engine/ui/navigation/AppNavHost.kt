@@ -12,6 +12,7 @@ import com.wstore.engine.ui.dashboard.DashboardScreen
 import com.wstore.engine.ui.inventory.inventoryRoute
 import com.wstore.engine.ui.product.ProductScreen
 import com.wstore.engine.ui.product.ProductViewModel
+import com.wstore.engine.ui.sales.salesRoute
 
 /**
  * نام فایل: AppNavHost.kt
@@ -43,6 +44,7 @@ fun AppNavHost() {
 
         customerRoute()
         inventoryRoute()
+        salesRoute()
 
         composable(
             route = ScreenRoute.ModulePlaceholder.route,
