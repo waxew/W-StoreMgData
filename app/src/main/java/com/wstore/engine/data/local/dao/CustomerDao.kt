@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.Flow
 /**
  * نام فایل: CustomerDao.kt
  * ماژول: Customer Data
- * وظیفه: عملیات CRUD و جستجوی مشتریان روی Room.
+ * وظیفه: عملیات CRUD، جستجو و مشاهده واکنشی مشتریان روی Room.
  */
 @Dao
 interface CustomerDao {
@@ -26,6 +26,9 @@ interface CustomerDao {
             "ORDER BY name COLLATE NOCASE ASC"
     )
     fun search(query: String): Flow<List<CustomerEntity>>
+
+    @Query("SELECT * FROM customers WHERE id = :id LIMIT 1")
+    fun observeById(id: Long): Flow<CustomerEntity?>
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun insert(customer: CustomerEntity): Long
