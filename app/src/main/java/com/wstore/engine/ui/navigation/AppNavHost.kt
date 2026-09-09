@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.wstore.engine.ui.customer.customerRoute
 import com.wstore.engine.ui.dashboard.DashboardScreen
 import com.wstore.engine.ui.product.ProductScreen
 import com.wstore.engine.ui.product.ProductViewModel
@@ -38,6 +39,8 @@ fun AppNavHost() {
             val viewModel: ProductViewModel = hiltViewModel()
             ProductScreen(viewModel = viewModel)
         }
+
+        customerRoute()
 
         composable(
             route = ScreenRoute.ModulePlaceholder.route,
