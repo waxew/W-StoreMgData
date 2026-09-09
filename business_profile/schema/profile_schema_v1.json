@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "required": [
+    "id",
+    "enabled",
+    "identity",
+    "modules",
+    "features",
+    "attributes",
+    "uiProfile"
+  ],
+  "description": "Business profile contract. New profiles must follow this schema without changing core code."
+}
