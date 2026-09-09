@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "id": "mobile_store_001",
+  "enabled": true,
+  "identity": {
+    "name": "فروشگاه موبایل",
+    "businessType": "MOBILE_STORE"
+  },
+  "modules": {
+    "customer": true,
+    "product": true,
+    "inventory": true,
+    "sales": true,
+    "invoice": true,
+    "reports": true,
+    "imei": true,
+    "warranty": true
+  },
+  "features": {
+    "device_model": true,
+    "imei": true,
+    "storage": true,
+    "color": true,
+    "serial": true,
+    "warranty": true
+  },
+  "attributes": [
+    {"key":"product.brand","label":"برند","type":"text","required":true,"visible":true},
+    {"key":"product.model","label":"مدل دستگاه","type":"text","required":true,"visible":true},
+    {"key":"product.imei","label":"IMEI","type":"serial","required":false,"visible":true},
+    {"key":"product.storage","label":"حافظه","type":"option","required":false,"visible":true,"options":["64GB","128GB","256GB","512GB","1TB"]},
+    {"key":"product.color","label":"رنگ","type":"text","required":false,"visible":true},
+    {"key":"product.warranty","label":"گارانتی","type":"text","required":false,"visible":true},
+    {"key":"product.serial","label":"شماره سریال","type":"serial","required":false,"visible":true}
+  ],
+  "uiProfile": {
+    "dashboardVariant": "mobile_dashboard",
+    "productCardVariant": "device_product_card",
+    "heroAssetKey": "mobile_dashboard_hero",
+    "navigationVariant": "mobile_navigation"
+  },
+  "theme": {
+    "name": "mobile_tech_theme",
+    "primaryToken": "mobile_primary",
+    "backgroundToken": "mobile_background",
+    "useDynamicColor": false
+  },
+  "assets": {
+    "iconKey": "mobile_app_icon",
+    "logoKey": "mobile_logo",
+    "dashboardHeroKey": "mobile_dashboard_hero",
+    "emptyStateKey": "mobile_empty_state"
+  }
+}
