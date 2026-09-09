@@ -1,8 +1,10 @@
 package com.wstore.engine.di
 
 import com.wstore.engine.data.local.dao.CustomerDao
+import com.wstore.engine.data.local.dao.InventoryDao
 import com.wstore.engine.data.local.dao.ProductDao
 import com.wstore.engine.data.repository.CustomerRepository
+import com.wstore.engine.data.repository.InventoryRepository
 import com.wstore.engine.data.repository.ProductRepository
 import dagger.Module
 import dagger.Provides
@@ -28,5 +30,14 @@ object RepositoryModule {
         dao: CustomerDao
     ): CustomerRepository {
         return CustomerRepository(dao)
+    }
+
+    @Provides
+    @Singleton
+    fun provideInventoryRepository(
+        inventoryDao: InventoryDao,
+        productDao: ProductDao
+    ): InventoryRepository {
+        return InventoryRepository(inventoryDao, productDao)
     }
 }

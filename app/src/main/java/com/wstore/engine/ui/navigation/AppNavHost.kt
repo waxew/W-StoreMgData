@@ -9,6 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.wstore.engine.ui.customer.customerRoute
 import com.wstore.engine.ui.dashboard.DashboardScreen
+import com.wstore.engine.ui.inventory.inventoryRoute
 import com.wstore.engine.ui.product.ProductScreen
 import com.wstore.engine.ui.product.ProductViewModel
 
@@ -41,6 +42,7 @@ fun AppNavHost() {
         }
 
         customerRoute()
+        inventoryRoute()
 
         composable(
             route = ScreenRoute.ModulePlaceholder.route,

@@ -38,6 +38,38 @@ private val MIGRATION_1_2 = object : Migration(1, 2) {
     }
 }
 
+/**
+ * مهاجرت نسخه 2 به 3.
+ * جدول تاریخچه گردش Inventory اضافه می‌شود و جداول Product و Customer بدون حذف باقی می‌مانند.
+ */
+private val MIGRATION_2_3 = object : Migration(2, 3) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL(
+            """
+            CREATE TABLE IF NOT EXISTS `inventory_transactions` (
+                `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                `productId` INTEGER NOT NULL,
+                `productName` TEXT NOT NULL,
+                `productCode` TEXT NOT NULL,
+                `type` TEXT NOT NULL,
+                `quantityDelta` INTEGER NOT NULL,
+                `stockBefore` INTEGER NOT NULL,
+                `stockAfter` INTEGER NOT NULL,
+                `note` TEXT NOT NULL,
+                `createdAt` INTEGER NOT NULL
+            )
+            """.trimIndent()
+        )
+
+        db.execSQL(
+            "CREATE INDEX IF NOT EXISTS `index_inventory_transactions_productId` ON `inventory_transactions` (`productId`)"
+        )
+        db.execSQL(
+            "CREATE INDEX IF NOT EXISTS `index_inventory_transactions_createdAt` ON `inventory_transactions` (`createdAt`)"
+        )
+    }
+}
+
 @Module
 @InstallIn(SingletonComponent::class)
 object DatabaseModule {
@@ -52,7 +84,7 @@ object DatabaseModule {
             AppDatabase::class.java,
             "wstore_database"
         )
-            .addMigrations(MIGRATION_1_2)
+            .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
             .build()
     }
 
@@ -65,4 +97,9 @@ object DatabaseModule {
     fun provideCustomerDao(
         database: AppDatabase
     ) = database.customerDao()
+
+    @Provides
+    fun provideInventoryDao(
+        database: AppDatabase
+    ) = database.inventoryDao()
 }
