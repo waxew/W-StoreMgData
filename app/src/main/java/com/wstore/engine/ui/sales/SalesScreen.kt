@@ -25,7 +25,8 @@ import androidx.compose.ui.unit.dp
  */
 @Composable
 fun SalesScreen(
-    viewModel: SalesViewModel
+    viewModel: SalesViewModel,
+    onSaleSelected: (Long) -> Unit
 ) {
     val customers by viewModel.customers.collectAsState()
     val products by viewModel.products.collectAsState()
@@ -165,6 +166,12 @@ fun SalesScreen(
             Text(
                 "#${sale.id} | ${sale.customerName} | مبلغ: ${sale.totalAmount} | ${sale.note}"
             )
+            Button(
+                onClick = { onSaleSelected(sale.id) },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("مشاهده جزئیات فروش #${sale.id}")
+            }
         }
     }
 }
