@@ -25,6 +25,9 @@ abstract class SalesDao {
     @Query("SELECT * FROM sales WHERE customerId = :customerId ORDER BY createdAt DESC, id DESC")
     abstract fun observeSalesForCustomer(customerId: Long): Flow<List<SaleEntity>>
 
+    @Query("SELECT * FROM sales WHERE id = :saleId LIMIT 1")
+    abstract fun observeSale(saleId: Long): Flow<SaleEntity?>
+
     @Query("SELECT * FROM sale_items WHERE saleId = :saleId ORDER BY id ASC")
     abstract fun observeSaleItems(saleId: Long): Flow<List<SaleItemEntity>>
 
