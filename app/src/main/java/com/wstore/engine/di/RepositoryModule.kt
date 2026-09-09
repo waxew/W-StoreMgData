@@ -3,12 +3,14 @@ package com.wstore.engine.di
 import com.wstore.engine.data.local.dao.CustomerDao
 import com.wstore.engine.data.local.dao.InventoryDao
 import com.wstore.engine.data.local.dao.InvoiceDao
+import com.wstore.engine.data.local.dao.ProductAttributeDao
 import com.wstore.engine.data.local.dao.ProductDao
 import com.wstore.engine.data.local.dao.SalesDao
 import com.wstore.engine.data.repository.CustomerRepository
 import com.wstore.engine.data.repository.DashboardRepository
 import com.wstore.engine.data.repository.InventoryRepository
 import com.wstore.engine.data.repository.InvoiceRepository
+import com.wstore.engine.data.repository.ProductAttributeRepository
 import com.wstore.engine.data.repository.ProductRepository
 import com.wstore.engine.data.repository.ReportsRepository
 import com.wstore.engine.data.repository.SalesRepository
@@ -18,6 +20,11 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
+/**
+ * نام فایل: RepositoryModule.kt
+ * ماژول: Dependency Injection
+ * وظیفه: ساخت Repositoryهای Data Layer بدون قرار دادن منطق تجاری در UI.
+ */
 @Module
 @InstallIn(SingletonComponent::class)
 object RepositoryModule {
@@ -28,6 +35,15 @@ object RepositoryModule {
         dao: ProductDao
     ): ProductRepository {
         return ProductRepository(dao)
+    }
+
+    /** Repository جدا برای مقادیر Dynamic Attribute کالا. */
+    @Provides
+    @Singleton
+    fun provideProductAttributeRepository(
+        dao: ProductAttributeDao
+    ): ProductAttributeRepository {
+        return ProductAttributeRepository(dao)
     }
 
     @Provides
