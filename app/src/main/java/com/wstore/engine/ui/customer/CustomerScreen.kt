@@ -25,13 +25,14 @@ import com.wstore.engine.data.local.entity.CustomerEntity
 /**
  * نام فایل: CustomerScreen.kt
  * ماژول: Customer
- * وظیفه: ثبت، ویرایش، حذف، جستجو و نمایش مشتریان.
+ * وظیفه: ثبت، ویرایش، حذف، جستجو، نمایش مشتریان و ورود به تاریخچه خرید.
  *
  * این صفحه فقط با CustomerViewModel کار می‌کند و مستقیماً به Room وابسته نیست.
  */
 @Composable
 fun CustomerScreen(
-    viewModel: CustomerViewModel
+    viewModel: CustomerViewModel,
+    onCustomerSelected: (Long) -> Unit
 ) {
     val customers by viewModel.customers.collectAsState()
     val error by viewModel.error.collectAsState()
@@ -155,6 +156,7 @@ fun CustomerScreen(
             ) { customer ->
                 CustomerCard(
                     customer = customer,
+                    onHistory = { onCustomerSelected(customer.id) },
                     onEdit = {
                         editingCustomer = customer
                         name = customer.name
@@ -179,6 +181,7 @@ fun CustomerScreen(
 @Composable
 private fun CustomerCard(
     customer: CustomerEntity,
+    onHistory: () -> Unit,
     onEdit: () -> Unit,
     onDelete: () -> Unit
 ) {
@@ -195,6 +198,9 @@ private fun CustomerCard(
             }
 
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                TextButton(onClick = onHistory) {
+                    Text("خریدها")
+                }
                 TextButton(onClick = onEdit) {
                     Text("ویرایش")
                 }
