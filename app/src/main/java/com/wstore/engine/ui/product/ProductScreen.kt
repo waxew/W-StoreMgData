@@ -19,6 +19,12 @@ fun ProductScreen(
         Text("Products")
         Text("W-StoreMgData Product Module")
 
+        AddProductForm(
+            onSave = { product ->
+                viewModel.addProduct(product)
+            }
+        )
+
         products.value.forEach { product ->
             Text(
                 "${product.name} | ${product.stock}"
