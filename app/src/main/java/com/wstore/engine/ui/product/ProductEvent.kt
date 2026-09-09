@@ -3,7 +3,10 @@ package com.wstore.engine.ui.product
 import com.wstore.engine.data.model.Product
 
 /**
- * رویدادهای UI ماژول کالا.
+ * نام فایل: ProductEvent.kt
+ * ماژول: Product UI
+ * وظیفه: قرارداد رویدادهای صفحه کالا شامل فیلدهای پایه و Attributeهای Profile فعال.
+ *
  * موجودی فقط هنگام ایجاد کالا مقدار اولیه می‌گیرد؛ تغییرات بعدی موجودی از Inventory انجام می‌شوند.
  */
 sealed interface ProductEvent {
@@ -12,7 +15,8 @@ sealed interface ProductEvent {
         val code: String,
         val category: String,
         val price: Double,
-        val stock: Int
+        val stock: Int,
+        val attributes: Map<String, String> = emptyMap()
     ) : ProductEvent
 
     data class UpdateProduct(
@@ -20,7 +24,8 @@ sealed interface ProductEvent {
         val name: String,
         val code: String,
         val category: String,
-        val price: Double
+        val price: Double,
+        val attributes: Map<String, String> = emptyMap()
     ) : ProductEvent
 
     data class DeleteProduct(val product: Product) : ProductEvent
