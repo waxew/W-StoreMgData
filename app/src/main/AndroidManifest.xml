@@ -12,6 +12,9 @@
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!-- فقط برای Update Checker و Integrationهای اینترنتی قابل فعال‌سازی از Config استفاده می‌شود. -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".WStoreApplication"
         android:theme="@style/Theme.WStoreEngine"
