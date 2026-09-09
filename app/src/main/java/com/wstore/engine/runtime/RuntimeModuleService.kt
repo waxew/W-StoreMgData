@@ -1,27 +1,28 @@
 package com.wstore.engine.runtime
 
+import com.wstore.engine.core.module.runtime.RuntimeModuleLoader
 import core.domain.BusinessRegistry
-import com.wstoremgdata.core.module.ModuleType
-import com.wstoremgdata.core.module.runtime.RuntimeModuleLoader
 
 /**
- * سرویس اتصال Business Profile به Module Runtime.
+ * نام فایل: RuntimeModuleService.kt
+ * ماژول: Runtime
+ * وظیفه: اتصال Business Profile فعال به RuntimeModuleLoader هسته.
  *
- * این لایه فقط تصمیم می‌گیرد چه قابلیت‌هایی فعال شوند.
- * منطق کسب‌وکار داخل Core باقی می‌ماند.
+ * این سرویس فقط لیست ماژول‌های فعال را از Profile می‌خواند و به Loader هسته می‌سپارد.
+ * منطق اختصاصی هیچ نوع فروشگاه در این فایل قرار نمی‌گیرد.
  */
-class RuntimeModuleService {
+object RuntimeModuleService {
 
     private val loader = RuntimeModuleLoader()
 
-    fun activeModules(): List<String> {
-        val profile = BusinessRegistry.getActive()
+    fun getActiveModules(): List<String> {
+        val profile = BusinessRegistry.current()
             ?: return emptyList()
 
         return loader.load(profile.enabledModules)
     }
 
     fun hasModule(moduleId: String): Boolean {
-        return activeModules().contains(moduleId)
+        return moduleId in getActiveModules()
     }
 }
