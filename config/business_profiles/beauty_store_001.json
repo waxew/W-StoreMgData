@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "id": "beauty_store_001",
+  "enabled": false,
+  "identity": {
+    "name": "فروشگاه آرایشی و بهداشتی",
+    "businessType": "BEAUTY_STORE"
+  },
+  "modules": {
+    "customer": true,
+    "product": true,
+    "inventory": true,
+    "sales": true,
+    "invoice": true,
+    "reports": true
+  },
+  "features": {
+    "brand": true,
+    "volume": true,
+    "expiration": true,
+    "batch": true,
+    "skin_type": true
+  },
+  "attributes": [
+    {"key":"product.brand","label":"برند","type":"text","required":true,"visible":true},
+    {"key":"product.volume","label":"حجم","type":"decimal","required":false,"visible":true},
+    {"key":"product.expiration","label":"تاریخ انقضا","type":"date","required":false,"visible":true},
+    {"key":"product.batch","label":"شماره بچ","type":"barcode","required":false,"visible":true},
+    {"key":"product.skin_type","label":"نوع پوست","type":"option","required":false,"visible":true,"options":["خشک","چرب","مختلط","حساس","همه انواع پوست"]}
+  ],
+  "uiProfile": {
+    "dashboardVariant": "beauty_dashboard",
+    "productCardVariant": "beauty_product_card",
+    "heroAssetKey": "beauty_dashboard_hero",
+    "navigationVariant": "beauty_navigation"
+  },
+  "theme": {
+    "name": "beauty_soft_theme",
+    "primaryToken": "beauty_primary",
+    "backgroundToken": "beauty_background",
+    "useDynamicColor": false
+  },
+  "assets": {
+    "iconKey": "beauty_app_icon",
+    "logoKey": "beauty_logo",
+    "dashboardHeroKey": "beauty_dashboard_hero",
+    "emptyStateKey": "beauty_empty_state"
+  }
+}
