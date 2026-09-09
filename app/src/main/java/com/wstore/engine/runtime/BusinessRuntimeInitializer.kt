@@ -22,6 +22,7 @@ object BusinessRuntimeInitializer {
                 "inventory",
                 "sales",
                 "invoice",
+                "reports",
                 "imei",
                 "warranty"
             ),
