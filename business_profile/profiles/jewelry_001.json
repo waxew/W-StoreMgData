@@ -1,0 +1,8 @@
+{
+  "id": "jewelry_001",
+  "name": "فروشگاه طلا و جواهر",
+  "modules": ["product", "customer", "inventory", "sales", "invoice", "reports"],
+  "attributes": ["type", "weight", "karat", "stone", "labor_cost", "serial"],
+  "ui": "jewelry_dashboard",
+  "theme": "jewelry_theme"
+}
