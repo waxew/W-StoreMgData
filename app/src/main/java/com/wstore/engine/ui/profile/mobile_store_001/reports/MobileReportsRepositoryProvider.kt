@@ -1,28 +1,64 @@
 package com.wstore.engine.ui.profile.mobile_store_001.reports
 
+import com.wstore.engine.data.repository.ReportsRepository
+import com.wstore.engine.data.repository.SalesRepository
+import kotlinx.coroutines.flow.first
+import java.util.Calendar
+import java.util.Locale
 import javax.inject.Inject
 
 /**
- * پیاده سازی اولیه تامین داده گزارشات پروفایل موبایل.
+ * تامین‌کننده واقعی داده گزارشات پروفایل فروشگاه موبایل.
  *
- * این کلاس نقطه اتصال آینده بین Profile UI و Repositoryهای اصلی است.
- * Core Repositoryها بدون وابستگی به Profile باقی می مانند.
+ * این Adapter داده را از Repositoryهای موجود می‌خواند و هیچ جدول یا مسیر نوشتنی جدیدی ایجاد نمی‌کند.
+ * Core Repositoryها مستقل از Profile باقی می‌مانند.
  */
-class MobileReportsRepositoryProvider @Inject constructor() : MobileReportsDataProvider {
+class MobileReportsRepositoryProvider @Inject constructor(
+    private val reportsRepository: ReportsRepository,
+    private val salesRepository: SalesRepository
+) : MobileReportsDataProvider {
 
     override suspend fun todaySales(): String {
-        return "0"
+        val start = startOfTodayMillis()
+        val total = salesRepository.observeSales()
+            .first()
+            .asSequence()
+            .filter { sale -> sale.createdAt >= start }
+            .sumOf { sale -> sale.totalAmount }
+        return formatAmount(total)
     }
 
     override suspend fun monthlySales(): String {
-        return "0"
+        val start = startOfCurrentMonthMillis()
+        val total = salesRepository.observeSales()
+            .first()
+            .asSequence()
+            .filter { sale -> sale.createdAt >= start }
+            .sumOf { sale -> sale.totalAmount }
+        return formatAmount(total)
     }
 
-    override suspend fun lowStockCount(): Int {
-        return 0
-    }
+    override suspend fun lowStockCount(): Int =
+        reportsRepository.observeReports().first().lowStockCount
 
-    override suspend fun profit(): String {
-        return "0"
-    }
+    override suspend fun inventoryValue(): String =
+        formatAmount(reportsRepository.observeReports().first().inventoryRetailValue)
+
+    private fun startOfTodayMillis(): Long = Calendar.getInstance().apply {
+        set(Calendar.HOUR_OF_DAY, 0)
+        set(Calendar.MINUTE, 0)
+        set(Calendar.SECOND, 0)
+        set(Calendar.MILLISECOND, 0)
+    }.timeInMillis
+
+    private fun startOfCurrentMonthMillis(): Long = Calendar.getInstance().apply {
+        set(Calendar.DAY_OF_MONTH, 1)
+        set(Calendar.HOUR_OF_DAY, 0)
+        set(Calendar.MINUTE, 0)
+        set(Calendar.SECOND, 0)
+        set(Calendar.MILLISECOND, 0)
+    }.timeInMillis
+
+    private fun formatAmount(value: Double): String =
+        String.format(Locale.getDefault(), "%,.0f", value)
 }
