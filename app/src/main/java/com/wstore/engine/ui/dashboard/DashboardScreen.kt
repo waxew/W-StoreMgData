@@ -19,13 +19,16 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.wstore.engine.profile.ProfileRuntimeStore
 import com.wstore.engine.runtime.RuntimeModuleService
+import com.wstore.engine.ui.profile.mobile_store_001.dashboard.MobileDashboardScreen
 
 /**
  * داشبورد مدیریتی برنامه.
  *
- * ماژول‌های فعال همچنان از Runtime می‌آیند؛ آمار فقط از DashboardViewModel خوانده می‌شود.
- * Dashboard هیچ عملیات نوشتنی روی Customer/Product/Sales/Inventory انجام نمی‌دهد.
+ * ماژول‌های فعال همچنان از Runtime می‌آیند و آمار فقط از DashboardViewModel خوانده می‌شود.
+ * انتخاب ظاهر Dashboard نیز از uiProfile پروفایل فعال انجام می‌شود؛ بنابراین Core Dashboard
+ * نام کسب‌وکار را Hard Code نمی‌کند و در صورت اضافه شدن Renderer جدید، Generic fallback حفظ می‌شود.
  */
 @Composable
 fun DashboardScreen(
@@ -35,7 +38,38 @@ fun DashboardScreen(
 ) {
     val state by viewModel.uiState.collectAsState()
     val modules = RuntimeModuleService.getActiveModules()
+    val profile = ProfileRuntimeStore.currentOrNull()
 
+    if (profile?.uiProfile?.dashboardVariant == "mobile_dashboard") {
+        MobileDashboardScreen(
+            state = state,
+            activeModules = modules,
+            onModuleSelected = onModuleSelected,
+            onSaleSelected = onSaleSelected,
+            storeName = profile.name
+        )
+        return
+    }
+
+    GenericDashboardContent(
+        state = state,
+        modules = modules,
+        onModuleSelected = onModuleSelected,
+        onSaleSelected = onSaleSelected
+    )
+}
+
+/**
+ * fallback عمومی برای Profileهایی که Renderer اختصاصی آن‌ها هنوز تکمیل نشده است.
+ * این بخش عمداً حفظ شده تا تکمیل UI پروفایل‌ها باعث حذف قابلیت‌های فعلی نشود.
+ */
+@Composable
+private fun GenericDashboardContent(
+    state: DashboardUiState,
+    modules: List<String>,
+    onModuleSelected: (String) -> Unit,
+    onSaleSelected: (Long) -> Unit
+) {
     Column(
         modifier = Modifier
             .verticalScroll(rememberScrollState())
