@@ -1,0 +1,8 @@
+{
+  "id": "book_store_001",
+  "name": "فروشگاه کتاب",
+  "modules": ["product", "customer", "inventory", "sales", "invoice", "reports"],
+  "attributes": ["isbn", "author", "publisher", "edition", "language", "category"],
+  "ui": "book_dashboard",
+  "theme": "book_theme"
+}
