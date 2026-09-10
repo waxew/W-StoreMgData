@@ -1,0 +1,14 @@
+{
+  "id":"beauty_store_001",
+  "name":"فروشگاه آرایشی و بهداشتی",
+  "enabled":true,
+  "theme":"beauty_theme",
+  "dashboard":"beauty_dashboard",
+  "modules":["product","customer","inventory","sales","invoice","reports"],
+  "attributes":[
+    {"key":"brand","type":"text"},
+    {"key":"volume","type":"number"},
+    {"key":"expiration_date","type":"text"},
+    {"key":"batch","type":"text"}
+  ]
+}
