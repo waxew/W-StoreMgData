@@ -17,12 +17,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.wstore.engine.data.local.entity.SaleEntity
+import com.wstore.engine.profile.ProfileRuntimeStore
+import com.wstore.engine.ui.profile.mobile_store_001.customer.MobileCustomerDetailScreen
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
 /**
  * صفحه جزئیات مشتری و تاریخچه خریدهای ثبت‌شده او.
+ * اگر Profile فعال UI اختصاصی داشته باشد، همان UI با ViewModel واقعی استفاده می‌شود.
  */
 @Composable
 fun CustomerDetailScreen(
@@ -30,6 +33,15 @@ fun CustomerDetailScreen(
     onBack: () -> Unit,
     onSaleSelected: (Long) -> Unit
 ) {
+    if (ProfileRuntimeStore.currentOrNull()?.id == "mobile_store_001") {
+        MobileCustomerDetailScreen(
+            viewModel = viewModel,
+            onBack = onBack,
+            onSaleSelected = onSaleSelected
+        )
+        return
+    }
+
     val history by viewModel.history.collectAsState()
     val customer = history.customer
 
