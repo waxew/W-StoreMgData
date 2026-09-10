@@ -1,0 +1,7 @@
+{
+  "id": "mobile_store_001",
+  "name": "فروشگاه موبایل",
+  "modules": ["product", "customer", "inventory", "sales", "invoice", "reports"],
+  "attributes": ["imei", "brand", "model", "storage", "ram", "warranty"],
+  "ui": "mobile_store_dashboard"
+}
