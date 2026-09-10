@@ -1,0 +1,8 @@
+{
+  "id": "pet_store_001",
+  "name": "پت شاپ",
+  "modules": ["product", "customer", "inventory", "sales", "invoice", "reports"],
+  "attributes": ["pet_type", "food_type", "age_range", "weight", "expiration_date"],
+  "ui": "pet_dashboard",
+  "theme": "pet_theme"
+}
