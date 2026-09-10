@@ -1,0 +1,14 @@
+{
+  "id":"boutique_001",
+  "name":"بوتیک",
+  "enabled":true,
+  "theme":"boutique_theme",
+  "dashboard":"boutique_dashboard",
+  "modules":["product","customer","inventory","sales","invoice","reports"],
+  "attributes":[
+    {"key":"size","type":"option"},
+    {"key":"color","type":"option"},
+    {"key":"material","type":"text"},
+    {"key":"season","type":"text"}
+  ]
+}
