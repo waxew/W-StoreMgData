@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.wstore.engine.data.local.entity.SaleEntity
 import com.wstore.engine.profile.ProfileRuntimeStore
+import com.wstore.engine.profile.ProfileUiVariants
 import com.wstore.engine.ui.profile.mobile_store_001.customer.MobileCustomerDetailScreen
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -25,7 +26,7 @@ import java.util.Locale
 
 /**
  * صفحه جزئیات مشتری و تاریخچه خریدهای ثبت‌شده او.
- * اگر Profile فعال UI اختصاصی داشته باشد، همان UI با ViewModel واقعی استفاده می‌شود.
+ * Renderer اختصاصی از metadata پروفایل انتخاب می‌شود و Generic UI به‌عنوان fallback حفظ می‌شود.
  */
 @Composable
 fun CustomerDetailScreen(
@@ -33,7 +34,7 @@ fun CustomerDetailScreen(
     onBack: () -> Unit,
     onSaleSelected: (Long) -> Unit
 ) {
-    if (ProfileRuntimeStore.currentOrNull()?.id == "mobile_store_001") {
+    if (ProfileRuntimeStore.currentOrNull()?.uiProfile?.navigationVariant == ProfileUiVariants.MOBILE_NAVIGATION) {
         MobileCustomerDetailScreen(
             viewModel = viewModel,
             onBack = onBack,
