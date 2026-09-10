@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.wstore.engine.data.repository.InventoryRepository
 import com.wstore.engine.profile.ProfileRuntimeStore
+import com.wstore.engine.profile.ProfileUiVariants
 import com.wstore.engine.ui.profile.mobile_store_001.inventory.MobileInventoryScreen
 
 /**
@@ -30,13 +31,13 @@ import com.wstore.engine.ui.profile.mobile_store_001.inventory.MobileInventorySc
  * وظیفه: نمایش موجودی فعلی، ثبت ورود/خروج و تاریخچه گردش کالا.
  *
  * Profileهای دارای UI اختصاصی از همان InventoryViewModel استفاده می‌کنند؛
- * بنابراین ظاهر می‌تواند اختصاصی باشد بدون اینکه منطق موجودی دو نسخه شود.
+ * Renderer از metadata پروفایل انتخاب می‌شود و منطق موجودی دو نسخه نمی‌شود.
  */
 @Composable
 fun InventoryScreen(
     viewModel: InventoryViewModel
 ) {
-    if (ProfileRuntimeStore.currentOrNull()?.id == "mobile_store_001") {
+    if (ProfileRuntimeStore.currentOrNull()?.uiProfile?.navigationVariant == ProfileUiVariants.MOBILE_NAVIGATION) {
         MobileInventoryScreen(viewModel = viewModel)
         return
     }
