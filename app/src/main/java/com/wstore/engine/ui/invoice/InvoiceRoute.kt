@@ -4,6 +4,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.wstore.engine.profile.ProfileRuntimeStore
+import com.wstore.engine.profile.ProfileUiVariants
 import com.wstore.engine.ui.profile.mobile_store_001.invoice.MobileInvoiceManagementScreen
 
 /**
@@ -16,7 +17,7 @@ fun NavGraphBuilder.invoiceRoute() {
         val viewModel: InvoiceViewModel = hiltViewModel()
         val profile = ProfileRuntimeStore.currentOrNull()
 
-        if (profile?.uiProfile?.navigationVariant == "mobile_navigation") {
+        if (profile?.uiProfile?.navigationVariant == ProfileUiVariants.MOBILE_NAVIGATION) {
             MobileInvoiceManagementScreen(viewModel = viewModel)
         } else {
             InvoiceScreen(viewModel = viewModel)
