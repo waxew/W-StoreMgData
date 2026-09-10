@@ -29,6 +29,15 @@ class ProductAttributeRepository(
         }
 
     /**
+     * Lookup واکنشی تمام Productهایی که برای یک کلید Dynamic Attribute مقدار دارند.
+     * Map با productId کلید می‌شود تا Feature UI بتواند بدون تغییر Product Core آن را به محصول وصل کند.
+     */
+    fun observeValuesForKey(attributeKey: String): Flow<Map<Long, String>> =
+        dao.observeForAttribute(attributeKey).map { rows ->
+            rows.associate { row -> row.productId to row.value }
+        }
+
+    /**
      * مقادیر Profile فعال را همگام می‌کند.
      * مقدار خالی به معنی پاک شدن همان Attribute است؛ سایر کلیدهای دیتابیس دست‌نخورده می‌مانند.
      */
