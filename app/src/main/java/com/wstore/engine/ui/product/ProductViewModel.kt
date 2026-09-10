@@ -52,6 +52,17 @@ class ProductViewModel @Inject constructor(
     val editingAttributeValues: StateFlow<Map<String, String>> =
         _editingAttributeValues.asStateFlow()
 
+    /**
+     * کالا و Attributeهای انتخاب‌شده برای صفحه جزئیات.
+     * داده‌های اختصاصی از ProductAttributeRepository خوانده می‌شوند و در UI مقدار نمونه ساخته نمی‌شود.
+     */
+    private val _selectedProduct = MutableStateFlow<Product?>(null)
+    val selectedProduct: StateFlow<Product?> = _selectedProduct.asStateFlow()
+
+    private val _selectedAttributeValues = MutableStateFlow<Map<String, String>>(emptyMap())
+    val selectedAttributeValues: StateFlow<Map<String, String>> =
+        _selectedAttributeValues.asStateFlow()
+
     private val _message = MutableStateFlow<String?>(null)
     val message: StateFlow<String?> = _message.asStateFlow()
 
@@ -143,7 +154,16 @@ class ProductViewModel @Inject constructor(
                     definitions = attributeDefinitions
                 )
             }.onSuccess {
+                val selected = _selectedProduct.value
                 cancelEdit()
+                if (selected?.id == event.id) {
+                    selectProduct(selected.copy(
+                        name = event.name.trim(),
+                        code = event.code.trim(),
+                        category = event.category.trim(),
+                        price = event.price
+                    ))
+                }
                 _message.value = "اطلاعات کالا و مشخصات اختصاصی آن ویرایش شد."
             }.onFailure { error ->
                 _message.value = error.message ?: "ویرایش کالا انجام نشد."
@@ -152,6 +172,7 @@ class ProductViewModel @Inject constructor(
     }
 
     private fun startEdit(product: Product) {
+        clearSelectedProduct()
         _editingProduct.value = product
         _editingAttributeValues.value = emptyMap()
 
@@ -169,6 +190,31 @@ class ProductViewModel @Inject constructor(
         }
     }
 
+    /**
+     * جزئیات محصول را از داده واقعی باز می‌کند و Attributeهای ذخیره‌شده را جداگانه می‌خواند.
+     */
+    fun selectProduct(product: Product) {
+        _selectedProduct.value = product
+        _selectedAttributeValues.value = emptyMap()
+
+        viewModelScope.launch {
+            runCatching {
+                attributeRepository.getValues(product.id)
+            }.onSuccess { values ->
+                if (_selectedProduct.value?.id == product.id) {
+                    _selectedAttributeValues.value = values
+                }
+            }.onFailure { error ->
+                _message.value = error.message ?: "خواندن جزئیات اختصاصی کالا انجام نشد."
+            }
+        }
+    }
+
+    fun clearSelectedProduct() {
+        _selectedProduct.value = null
+        _selectedAttributeValues.value = emptyMap()
+    }
+
     private fun cancelEdit() {
         _editingProduct.value = null
         _editingAttributeValues.value = emptyMap()
@@ -179,6 +225,9 @@ class ProductViewModel @Inject constructor(
             runCatching {
                 repository.delete(product.toEntity())
             }.onSuccess { result ->
+                if (result == ProductDeleteResult.Deleted && _selectedProduct.value?.id == product.id) {
+                    clearSelectedProduct()
+                }
                 _message.value = when (result) {
                     ProductDeleteResult.Deleted -> "کالا حذف شد."
                     ProductDeleteResult.NotFound -> "کالا قبلاً حذف شده یا پیدا نشد."
@@ -202,6 +251,16 @@ class ProductViewModel @Inject constructor(
             repository.observeProducts().collect { entities ->
                 _allProducts.value = entities.map { it.toModel() }
                 applyFilter()
+
+                val selectedId = _selectedProduct.value?.id
+                if (selectedId != null) {
+                    val refreshed = _allProducts.value.firstOrNull { it.id == selectedId }
+                    if (refreshed == null) {
+                        clearSelectedProduct()
+                    } else {
+                        _selectedProduct.value = refreshed
+                    }
+                }
             }
         }
     }
