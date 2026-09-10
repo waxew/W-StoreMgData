@@ -19,6 +19,7 @@
   "features": {
     "device_model": true,
     "imei": true,
+    "ram": true,
     "storage": true,
     "color": true,
     "serial": true,
@@ -28,6 +29,7 @@
     {"key":"product.brand","label":"برند","type":"text","required":true,"visible":true},
     {"key":"product.model","label":"مدل دستگاه","type":"text","required":true,"visible":true},
     {"key":"product.imei","label":"IMEI","type":"serial","required":false,"visible":true},
+    {"key":"product.ram","label":"RAM","type":"option","required":false,"visible":true,"options":["4GB","6GB","8GB","12GB","16GB","24GB"]},
     {"key":"product.storage","label":"حافظه","type":"option","required":false,"visible":true,"options":["64GB","128GB","256GB","512GB","1TB"]},
     {"key":"product.color","label":"رنگ","type":"text","required":false,"visible":true},
     {"key":"product.warranty","label":"گارانتی","type":"text","required":false,"visible":true},
