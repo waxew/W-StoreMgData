@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.wstore.engine.data.model.Product
 import com.wstore.engine.profile.ProfileRuntimeStore
+import com.wstore.engine.ui.profile.mobile_store_001.product.MobileProductDetailScreen
 import com.wstore.engine.ui.profile.mobile_store_001.product.MobileProductFormScreen
 import com.wstore.engine.ui.profile.mobile_store_001.product.MobileProductListScreen
 
@@ -46,6 +47,8 @@ fun ProductScreen(
     val query by viewModel.query.collectAsState()
     val editingProduct by viewModel.editingProduct.collectAsState()
     val editingAttributeValues by viewModel.editingAttributeValues.collectAsState()
+    val selectedProduct by viewModel.selectedProduct.collectAsState()
+    val selectedAttributeValues by viewModel.selectedAttributeValues.collectAsState()
     val message by viewModel.message.collectAsState()
     val activeProfile = remember { ProfileRuntimeStore.current() }
     var pendingDelete by remember { mutableStateOf<Product?>(null) }
@@ -87,6 +90,18 @@ fun ProductScreen(
                 .fillMaxSize()
                 .padding(vertical = 12.dp)
         ) {
+            selectedProduct?.let { product ->
+                MobileProductDetailScreen(
+                    product = product,
+                    attributeDefinitions = viewModel.attributeDefinitions,
+                    attributeValues = selectedAttributeValues,
+                    onEdit = { viewModel.onEvent(ProductEvent.StartEdit(product)) },
+                    onClose = viewModel::clearSelectedProduct,
+                    modifier = Modifier.padding(horizontal = 16.dp)
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+            }
+
             MobileProductFormScreen(
                 initialProduct = editingProduct,
                 dynamicAttributeDefinitions = viewModel.attributeDefinitions,
@@ -110,6 +125,7 @@ fun ProductScreen(
                 products = products,
                 query = query,
                 onQueryChange = { viewModel.onEvent(ProductEvent.Search(it)) },
+                onView = viewModel::selectProduct,
                 onEdit = { viewModel.onEvent(ProductEvent.StartEdit(it)) },
                 onDelete = { pendingDelete = it },
                 modifier = Modifier.weight(1f)
