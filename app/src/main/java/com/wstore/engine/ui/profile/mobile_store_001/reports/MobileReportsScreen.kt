@@ -9,13 +9,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
 /**
@@ -44,7 +45,11 @@ fun MobileReportsScreen(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(text = "گزارشات فروشگاه موبایل")
+            Text(
+                text = "گزارشات فروشگاه موبایل",
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold
+            )
             Button(onClick = onBack) {
                 Text("بازگشت")
             }
@@ -55,28 +60,28 @@ fun MobileReportsScreen(
         }
 
         state.error?.let { message ->
-            Text(text = message)
+            Text(text = message, color = MaterialTheme.colorScheme.error)
             Button(onClick = viewModel::refresh) {
                 Text("تلاش دوباره")
             }
         }
 
-        ReportCard(
+        MobileReportCard(
             title = "فروش امروز",
             value = state.todaySales
         )
 
-        ReportCard(
+        MobileReportCard(
             title = "فروش ماه جاری",
             value = state.monthlySales
         )
 
-        ReportCard(
+        MobileReportCard(
             title = "کالاهای کم‌موجود",
             value = state.lowStockCount.toString()
         )
 
-        ReportCard(
+        MobileReportCard(
             title = "ارزش فروش موجودی",
             value = state.inventoryValue
         )
@@ -87,22 +92,6 @@ fun MobileReportsScreen(
             enabled = !state.isLoading
         ) {
             Text("به‌روزرسانی گزارش")
-        }
-    }
-}
-
-@Composable
-private fun ReportCard(
-    title: String,
-    value: String
-) {
-    Card(modifier = Modifier.fillMaxWidth()) {
-        Column(
-            modifier = Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(4.dp)
-        ) {
-            Text(text = title)
-            Text(text = value)
         }
     }
 }
