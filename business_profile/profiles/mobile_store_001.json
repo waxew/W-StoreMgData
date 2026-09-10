@@ -1,7 +1,16 @@
 {
   "id": "mobile_store_001",
   "name": "فروشگاه موبایل",
+  "enabled": true,
+  "theme": "mobile_theme",
+  "dashboard": "mobile_store_dashboard",
   "modules": ["product", "customer", "inventory", "sales", "invoice", "reports"],
-  "attributes": ["imei", "brand", "model", "storage", "ram", "warranty"],
-  "ui": "mobile_store_dashboard"
+  "attributes": [
+    {"key":"brand","type":"text"},
+    {"key":"model","type":"text"},
+    {"key":"imei","type":"serial"},
+    {"key":"storage","type":"option"},
+    {"key":"ram","type":"number"},
+    {"key":"warranty","type":"text"}
+  ]
 }
