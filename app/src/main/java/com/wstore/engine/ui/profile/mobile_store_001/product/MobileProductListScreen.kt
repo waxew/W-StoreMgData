@@ -22,7 +22,7 @@ import com.wstore.engine.ui.profile.mobile_store_001.components.MobileProductCar
 /**
  * نام فایل: MobileProductListScreen.kt
  * پروفایل: mobile_store_001
- * وظیفه: نمایش لیست واقعی کالاهای فروشگاه موبایل با جستجو و عملیات ویرایش/حذف.
+ * وظیفه: نمایش لیست واقعی کالاهای فروشگاه موبایل با جستجو و عملیات جزئیات/ویرایش/حذف.
  *
  * داده‌ها از ProductViewModel وارد این Screen می‌شوند و هیچ داده نمونه‌ای در UI نگهداری نمی‌شود.
  */
@@ -31,6 +31,7 @@ fun MobileProductListScreen(
     products: List<Product>,
     query: String,
     onQueryChange: (String) -> Unit,
+    onView: (Product) -> Unit,
     onEdit: (Product) -> Unit,
     onDelete: (Product) -> Unit,
     modifier: Modifier = Modifier
@@ -63,6 +64,18 @@ fun MobileProductListScreen(
 
         Spacer(modifier = Modifier.height(2.dp))
 
+        if (products.isEmpty()) {
+            Text(
+                text = if (query.isBlank()) {
+                    "هنوز کالایی ثبت نشده است."
+                } else {
+                    "کالایی مطابق جستجو پیدا نشد."
+                },
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+
         LazyColumn(
             modifier = Modifier.weight(1f),
             verticalArrangement = Arrangement.spacedBy(10.dp)
@@ -73,6 +86,7 @@ fun MobileProductListScreen(
             ) { product ->
                 MobileProductCard(
                     product = product,
+                    onView = { onView(product) },
                     onEdit = { onEdit(product) },
                     onDelete = { onDelete(product) }
                 )
