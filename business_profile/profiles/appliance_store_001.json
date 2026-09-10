@@ -1,0 +1,8 @@
+{
+  "id": "appliance_store_001",
+  "name": "فروشگاه لوازم خانگی",
+  "modules": ["product", "customer", "inventory", "sales", "invoice", "warranty", "reports"],
+  "attributes": ["brand", "model", "serial", "energy_rating", "warranty"],
+  "ui": "appliance_dashboard",
+  "theme": "appliance_theme"
+}
