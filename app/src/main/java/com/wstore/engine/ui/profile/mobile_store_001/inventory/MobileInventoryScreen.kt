@@ -22,7 +22,8 @@ fun MobileInventoryScreen(
     productCount: String = "0",
     lowStockCount: String = "0",
     incomingCount: String = "0",
-    outgoingCount: String = "0"
+    outgoingCount: String = "0",
+    pendingRestock: String = "0"
 ) {
     Column(
         modifier = Modifier.padding(16.dp),
@@ -45,6 +46,8 @@ fun MobileInventoryScreen(
             MobileInventoryCard("ورودی", incomingCount)
             MobileInventoryCard("خروجی", outgoingCount)
         }
+
+        MobileInventoryCard("در انتظار تامین", pendingRestock)
     }
 }
 
@@ -53,7 +56,7 @@ private fun MobileInventoryCard(
     title: String,
     value: String
 ) {
-    Card(modifier = Modifier.weight(1f)) {
+    Card(modifier = Modifier.padding(4.dp)) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(text = title)
             Text(text = value)
