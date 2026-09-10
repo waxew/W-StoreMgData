@@ -21,6 +21,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.wstore.engine.data.local.entity.CustomerEntity
+import com.wstore.engine.profile.ProfileRuntimeStore
+import com.wstore.engine.ui.profile.mobile_store_001.customer.MobileCustomerScreen
 
 /**
  * نام فایل: CustomerScreen.kt
@@ -28,12 +30,21 @@ import com.wstore.engine.data.local.entity.CustomerEntity
  * وظیفه: ثبت، ویرایش، حذف، جستجو، نمایش مشتریان و ورود به تاریخچه خرید.
  *
  * این صفحه فقط با CustomerViewModel کار می‌کند و مستقیماً به Room وابسته نیست.
+ * اگر Profile فعال UI اختصاصی داشته باشد، همان UI با همین ViewModel واقعی رندر می‌شود.
  */
 @Composable
 fun CustomerScreen(
     viewModel: CustomerViewModel,
     onCustomerSelected: (Long) -> Unit
 ) {
+    if (ProfileRuntimeStore.currentOrNull()?.id == "mobile_store_001") {
+        MobileCustomerScreen(
+            viewModel = viewModel,
+            onCustomerSelected = onCustomerSelected
+        )
+        return
+    }
+
     val customers by viewModel.customers.collectAsState()
     val error by viewModel.error.collectAsState()
 
