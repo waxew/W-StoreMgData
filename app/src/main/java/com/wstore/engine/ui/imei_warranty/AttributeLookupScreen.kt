@@ -7,21 +7,24 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 /**
  * صفحه نمایش Attributeهای اختصاصی مانند IMEI و Warranty.
  *
- * این صفحه عمداً به صنعت خاص وابسته نیست و داده را از Dynamic Attribute Engine دریافت می‌کند.
- * در مرحله بعد ViewModel واقعی Repository به این UI متصل می‌شود.
+ * داده از ViewModel دریافت می‌شود و UI هیچ داده کسب‌وکاری ثابت نگهداری نمی‌کند.
  */
 @Composable
 fun AttributeLookupScreen(
     title: String,
-    values: Map<String, String>,
+    viewModel: AttributeLookupViewModel,
     modifier: Modifier = Modifier
 ) {
+    val values by viewModel.values.collectAsState()
+
     Column(
         modifier = modifier
             .fillMaxSize()
