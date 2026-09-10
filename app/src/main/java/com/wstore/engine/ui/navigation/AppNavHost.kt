@@ -1,12 +1,10 @@
 package com.wstore.engine.ui.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.wstore.engine.ui.customer.CustomerModule
 import com.wstore.engine.ui.customer.customerRoute
 import com.wstore.engine.ui.dashboard.DashboardScreen
@@ -18,13 +16,12 @@ import com.wstore.engine.ui.product.ProductViewModel
 import com.wstore.engine.ui.reports.reportsRoute
 import com.wstore.engine.ui.sales.SalesModule
 import com.wstore.engine.ui.sales.salesRoute
+import com.wstore.engine.ui.imei_warranty.AttributeLookupRoutes
+import com.wstore.engine.ui.imei_warranty.AttributeLookupScreen
 
 /**
  * نام فایل: AppNavHost.kt
- * ماژول: Navigation
- * وظیفه: تعریف Navigation Graph اصلی برنامه و اتصال Routeها به Feature Screenها.
- *
- * Dashboard فقط شناسه Module را ارسال می‌کند و Route از ModuleRouteRegistry دریافت می‌شود.
+ * وظیفه: اتصال Navigation Graph اصلی به Featureهای فعال.
  */
 @Composable
 fun AppNavHost() {
@@ -62,21 +59,25 @@ fun AppNavHost() {
             onBack = { navController.popBackStack() }
         )
         inventoryRoute()
-        salesRoute(
-            onSaleSelected = { saleId ->
-                navController.navigate(SalesModule.detailRoute(saleId))
-            },
-            onBack = { navController.popBackStack() }
-        )
+        salesRoute(onBack = { navController.popBackStack() })
         invoiceRoute()
-        reportsRoute(
-            onBack = { navController.popBackStack() }
-        )
+        reportsRoute(onBack = { navController.popBackStack() })
 
-        composable(
-            route = ScreenRoute.ModulePlaceholder.route,
-            arguments = listOf(navArgument("moduleId") { type = NavType.StringType })
-        ) { backStackEntry ->
+        composable(AttributeLookupRoutes.IMEI) {
+            AttributeLookupScreen(
+                title = "IMEI",
+                values = emptyMap()
+            )
+        }
+
+        composable(AttributeLookupRoutes.WARRANTY) {
+            AttributeLookupScreen(
+                title = "Warranty",
+                values = emptyMap()
+            )
+        }
+
+        composable(ScreenRoute.ModulePlaceholder.route) { backStackEntry ->
             val moduleId = backStackEntry.arguments?.getString("moduleId").orEmpty()
             ModulePlaceholderScreen(
                 moduleId = moduleId,
