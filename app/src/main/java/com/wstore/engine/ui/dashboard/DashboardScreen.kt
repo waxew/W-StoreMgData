@@ -20,6 +20,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.wstore.engine.profile.ProfileRuntimeStore
+import com.wstore.engine.profile.ProfileUiVariants
 import com.wstore.engine.runtime.RuntimeModuleService
 import com.wstore.engine.ui.profile.mobile_store_001.dashboard.MobileDashboardScreen
 
@@ -40,7 +41,7 @@ fun DashboardScreen(
     val modules = RuntimeModuleService.getActiveModules()
     val profile = ProfileRuntimeStore.currentOrNull()
 
-    if (profile?.uiProfile?.dashboardVariant == "mobile_dashboard") {
+    if (profile?.uiProfile?.dashboardVariant == ProfileUiVariants.MOBILE_DASHBOARD) {
         MobileDashboardScreen(
             state = state,
             activeModules = modules,
