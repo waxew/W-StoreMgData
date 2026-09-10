@@ -1,0 +1,8 @@
+{
+  "id": "auto_parts_001",
+  "name": "فروشگاه قطعات خودرو",
+  "modules": ["product", "customer", "inventory", "sales", "invoice", "reports"],
+  "attributes": ["part_number", "oem", "vehicle_brand", "vehicle_model", "compatibility"],
+  "ui": "auto_parts_dashboard",
+  "theme": "auto_parts_theme"
+}
