@@ -28,6 +28,17 @@ interface ProductAttributeDao {
     )
     suspend fun getForProduct(productId: Long): List<ProductAttributeValueEntity>
 
+    /**
+     * تمام مقادیر واقعی یک Attribute را برای ساخت Lookupهای Profile-Driven برمی‌گرداند.
+     * این Query فقط Read است و به نوع کسب‌وکار وابستگی ندارد.
+     */
+    @Query(
+        "SELECT * FROM product_attribute_values " +
+            "WHERE attributeKey = :attributeKey AND TRIM(value) != '' " +
+            "ORDER BY value COLLATE NOCASE ASC, productId ASC"
+    )
+    fun observeForAttribute(attributeKey: String): Flow<List<ProductAttributeValueEntity>>
+
     @Upsert
     suspend fun upsert(value: ProductAttributeValueEntity)
 
