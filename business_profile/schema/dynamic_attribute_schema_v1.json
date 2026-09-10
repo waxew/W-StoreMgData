@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "supportedTypes": [
+    "text",
+    "number",
+    "decimal",
+    "boolean",
+    "option",
+    "serial"
+  ],
+  "description": "ساختار پایه فیلدهای پویا برای Business Profile"
+}
