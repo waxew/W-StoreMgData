@@ -27,13 +27,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.wstore.engine.data.model.Product
 import com.wstore.engine.profile.ProfileRuntimeStore
+import com.wstore.engine.ui.profile.mobile_store_001.product.MobileProductFormScreen
+import com.wstore.engine.ui.profile.mobile_store_001.product.MobileProductListScreen
 
 /**
  * نام فایل: ProductScreen.kt
  * ماژول: Product UI
- * وظیفه: مدیریت کالا و نمایش فرم پایه همراه با Attributeهای Business Profile فعال.
+ * وظیفه: مدیریت کالا و انتخاب Renderer مناسب بر اساس Business Profile فعال.
  *
- * این Screen نوع کسب‌وکار را Hard Code نمی‌کند؛ نام Profile و فیلدهای اختصاصی از Runtime خوانده می‌شوند.
+ * ProductViewModel و Repository برای همه Profileها مشترک می‌مانند؛ فقط Presentation Layer بر اساس
+ * Metadata پروفایل تغییر می‌کند. Generic UI نیز به عنوان fallback حفظ شده است.
  */
 @Composable
 fun ProductScreen(
@@ -51,98 +54,83 @@ fun ProductScreen(
         viewModel.loadProducts()
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        Text("مدیریت کالا — ${activeProfile.name}")
-        Spacer(modifier = Modifier.height(8.dp))
-
-        OutlinedTextField(
-            modifier = Modifier.fillMaxWidth(),
-            value = query,
-            onValueChange = {
-                viewModel.onEvent(ProductEvent.Search(it))
-            },
-            label = { Text("جستجو بر اساس نام، کد یا دسته‌بندی") }
-        )
-
-        Spacer(modifier = Modifier.height(12.dp))
-
-        AddProductForm(
-            initialProduct = editingProduct,
-            dynamicAttributeDefinitions = viewModel.attributeDefinitions,
-            initialAttributeValues = editingAttributeValues,
-            onSave = { form ->
-                val editing = editingProduct
-                if (editing == null) {
-                    viewModel.onEvent(
-                        ProductEvent.AddProduct(
-                            name = form.name,
-                            code = form.code,
-                            category = form.category,
-                            price = form.price,
-                            stock = form.stock,
-                            attributes = form.attributes
-                        )
-                    )
-                } else {
-                    viewModel.onEvent(
-                        ProductEvent.UpdateProduct(
-                            id = editing.id,
-                            name = form.name,
-                            code = form.code,
-                            category = form.category,
-                            price = form.price,
-                            attributes = form.attributes
-                        )
-                    )
-                }
-            },
-            onCancel = {
-                viewModel.onEvent(ProductEvent.CancelEdit)
-            }
-        )
-
-        message?.let { text ->
-            Spacer(modifier = Modifier.height(8.dp))
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(text, modifier = Modifier.weight(1f))
-                TextButton(
-                    onClick = { viewModel.onEvent(ProductEvent.DismissMessage) }
-                ) {
-                    Text("بستن")
-                }
-            }
+    val onSave: (ProductFormData) -> Unit = { form ->
+        val editing = editingProduct
+        if (editing == null) {
+            viewModel.onEvent(
+                ProductEvent.AddProduct(
+                    name = form.name,
+                    code = form.code,
+                    category = form.category,
+                    price = form.price,
+                    stock = form.stock,
+                    attributes = form.attributes
+                )
+            )
+        } else {
+            viewModel.onEvent(
+                ProductEvent.UpdateProduct(
+                    id = editing.id,
+                    name = form.name,
+                    code = form.code,
+                    category = form.category,
+                    price = form.price,
+                    attributes = form.attributes
+                )
+            )
         }
+    }
 
-        Spacer(modifier = Modifier.height(12.dp))
-        Text("کالاها (${products.size})")
-        Spacer(modifier = Modifier.height(8.dp))
-
-        LazyColumn(
-            modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+    if (activeProfile.uiProfile.productCardVariant == "device_product_card") {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(vertical = 12.dp)
         ) {
-            items(
-                items = products,
-                key = { it.id }
-            ) { product ->
-                ProductRow(
-                    product = product,
-                    onEdit = {
-                        viewModel.onEvent(ProductEvent.StartEdit(product))
-                    },
-                    onDelete = {
-                        pendingDelete = product
-                    }
+            MobileProductFormScreen(
+                initialProduct = editingProduct,
+                dynamicAttributeDefinitions = viewModel.attributeDefinitions,
+                initialAttributeValues = editingAttributeValues,
+                onSave = onSave,
+                onCancel = { viewModel.onEvent(ProductEvent.CancelEdit) },
+                modifier = Modifier.padding(horizontal = 16.dp)
+            )
+
+            message?.let { text ->
+                ProductMessage(
+                    message = text,
+                    onDismiss = { viewModel.onEvent(ProductEvent.DismissMessage) },
+                    modifier = Modifier.padding(horizontal = 16.dp)
                 )
             }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            MobileProductListScreen(
+                products = products,
+                query = query,
+                onQueryChange = { viewModel.onEvent(ProductEvent.Search(it)) },
+                onEdit = { viewModel.onEvent(ProductEvent.StartEdit(it)) },
+                onDelete = { pendingDelete = it },
+                modifier = Modifier.weight(1f)
+            )
         }
+    } else {
+        GenericProductContent(
+            profileName = activeProfile.name,
+            products = products,
+            query = query,
+            editingProduct = editingProduct,
+            editingAttributeValues = editingAttributeValues,
+            attributeDefinitions = viewModel.attributeDefinitions,
+            message = message,
+            onQueryChange = { viewModel.onEvent(ProductEvent.Search(it)) },
+            onSave = onSave,
+            onCancelEdit = { viewModel.onEvent(ProductEvent.CancelEdit) },
+            onDismissMessage = { viewModel.onEvent(ProductEvent.DismissMessage) },
+            onEdit = { viewModel.onEvent(ProductEvent.StartEdit(it)) },
+            onDelete = { pendingDelete = it }
+        )
     }
 
     pendingDelete?.let { product ->
@@ -171,6 +159,93 @@ fun ProductScreen(
                 }
             }
         )
+    }
+}
+
+@Composable
+private fun GenericProductContent(
+    profileName: String,
+    products: List<Product>,
+    query: String,
+    editingProduct: Product?,
+    editingAttributeValues: Map<String, String>,
+    attributeDefinitions: List<com.wstore.engine.profile.ProfileAttributeDefinition>,
+    message: String?,
+    onQueryChange: (String) -> Unit,
+    onSave: (ProductFormData) -> Unit,
+    onCancelEdit: () -> Unit,
+    onDismissMessage: () -> Unit,
+    onEdit: (Product) -> Unit,
+    onDelete: (Product) -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        Text("مدیریت کالا — $profileName")
+        Spacer(modifier = Modifier.height(8.dp))
+
+        OutlinedTextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = query,
+            onValueChange = onQueryChange,
+            label = { Text("جستجو بر اساس نام، کد یا دسته‌بندی") }
+        )
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        AddProductForm(
+            initialProduct = editingProduct,
+            dynamicAttributeDefinitions = attributeDefinitions,
+            initialAttributeValues = editingAttributeValues,
+            onSave = onSave,
+            onCancel = onCancelEdit
+        )
+
+        message?.let { text ->
+            ProductMessage(
+                message = text,
+                onDismiss = onDismissMessage
+            )
+        }
+
+        Spacer(modifier = Modifier.height(12.dp))
+        Text("کالاها (${products.size})")
+        Spacer(modifier = Modifier.height(8.dp))
+
+        LazyColumn(
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            items(
+                items = products,
+                key = { it.id }
+            ) { product ->
+                ProductRow(
+                    product = product,
+                    onEdit = { onEdit(product) },
+                    onDelete = { onDelete(product) }
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun ProductMessage(
+    message: String,
+    onDismiss: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(message, modifier = Modifier.weight(1f))
+        TextButton(onClick = onDismiss) {
+            Text("بستن")
+        }
     }
 }
 
