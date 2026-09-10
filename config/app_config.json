@@ -1,0 +1,26 @@
+{
+  "app": {
+    "name": "W-StoreMgData",
+    "version": "1.0.0",
+    "description": "White Label Business Profile Store Engine"
+  },
+  "business_profile": {
+    "enabled": true,
+    "active_profile": "mobile_002",
+    "allow_profile_switch": false
+  },
+  "ads": {
+    "enabled": false,
+    "show_for_guest": true,
+    "hide_for_vip": true
+  },
+  "update": {
+    "enabled": true,
+    "check_on_start": true,
+    "show_notification": true
+  },
+  "ui": {
+    "drawer_enabled": true,
+    "logo_animation_enabled": true
+  }
+}
