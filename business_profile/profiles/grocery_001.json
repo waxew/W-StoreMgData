@@ -1,0 +1,8 @@
+{
+  "id": "grocery_001",
+  "name": "فروشگاه مواد غذایی",
+  "modules": ["product", "customer", "inventory", "sales", "invoice", "reports"],
+  "attributes": ["barcode", "brand", "batch", "production_date", "expiration_date", "supplier"],
+  "ui": "grocery_dashboard",
+  "theme": "grocery_theme"
+}
