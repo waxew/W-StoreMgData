@@ -5,12 +5,13 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import com.wstore.engine.runtime.ApplicationRuntimeInitializer
 import com.wstore.engine.ui.navigation.AppNavHost
+import com.wstore.engine.ui.profile.ProfileThemeHost
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
  * نام فایل: MainActivity.kt
  * ماژول: Application Entry
- * وظیفه: راه‌اندازی Config/Profile Runtime و سپس ساخت Navigation Graph برنامه.
+ * وظیفه: راه‌اندازی Config/Profile Runtime، اعمال Theme پروفایل فعال و سپس ساخت Navigation Graph برنامه.
  *
  * هیچ اطلاعات ثابت برنامه یا نوع کسب‌وکار در این Activity نگهداری نمی‌شود.
  */
@@ -23,7 +24,9 @@ class MainActivity : ComponentActivity() {
         ApplicationRuntimeInitializer.initialize(applicationContext)
 
         setContent {
-            AppNavHost()
+            ProfileThemeHost {
+                AppNavHost()
+            }
         }
     }
 }
