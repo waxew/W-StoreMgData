@@ -20,19 +20,21 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.wstore.engine.profile.ProfileRuntimeStore
+import com.wstore.engine.profile.ProfileUiVariants
 import com.wstore.engine.ui.profile.mobile_store_001.sales.MobileInvoiceScreen
 
 /**
  * صفحه فروش واقعی: انتخاب مشتری، افزودن کالا به سبد، ثبت فروش و مشاهده تاریخچه.
  *
  * Profileهای دارای UI اختصاصی همچنان از همین SalesViewModel و Repositoryهای واقعی استفاده می‌کنند.
+ * Renderer از metadata پروفایل انتخاب می‌شود و Generic Sales به‌عنوان fallback حفظ می‌شود.
  */
 @Composable
 fun SalesScreen(
     viewModel: SalesViewModel,
     onSaleSelected: (Long) -> Unit
 ) {
-    if (ProfileRuntimeStore.currentOrNull()?.id == "mobile_store_001") {
+    if (ProfileRuntimeStore.currentOrNull()?.uiProfile?.navigationVariant == ProfileUiVariants.MOBILE_NAVIGATION) {
         MobileInvoiceScreen(
             viewModel = viewModel,
             onSaleSelected = onSaleSelected
