@@ -23,11 +23,12 @@ import com.wstore.engine.data.model.Product
  * وظیفه: نمایش کارت کالا در لیست فروشگاه موبایل بر اساس مدل Product مشترک.
  *
  * مشخصات اختصاصی مانند IMEI/RAM/Storage در Product Core ذخیره نمی‌شوند و در صفحه جزئیات
- * از Dynamic Attribute Repository خوانده خواهند شد.
+ * از Dynamic Attribute Repository خوانده می‌شوند.
  */
 @Composable
 fun MobileProductCard(
     product: Product,
+    onView: () -> Unit,
     onEdit: () -> Unit,
     onDelete: () -> Unit,
     modifier: Modifier = Modifier
@@ -81,6 +82,9 @@ fun MobileProductCard(
             }
 
             Row {
+                TextButton(onClick = onView) {
+                    Text("جزئیات")
+                }
                 TextButton(onClick = onEdit) {
                     Text("ویرایش")
                 }
