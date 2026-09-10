@@ -19,15 +19,27 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.wstore.engine.profile.ProfileRuntimeStore
+import com.wstore.engine.ui.profile.mobile_store_001.sales.MobileInvoiceScreen
 
 /**
  * صفحه فروش واقعی: انتخاب مشتری، افزودن کالا به سبد، ثبت فروش و مشاهده تاریخچه.
+ *
+ * Profileهای دارای UI اختصاصی همچنان از همین SalesViewModel و Repositoryهای واقعی استفاده می‌کنند.
  */
 @Composable
 fun SalesScreen(
     viewModel: SalesViewModel,
     onSaleSelected: (Long) -> Unit
 ) {
+    if (ProfileRuntimeStore.currentOrNull()?.id == "mobile_store_001") {
+        MobileInvoiceScreen(
+            viewModel = viewModel,
+            onSaleSelected = onSaleSelected
+        )
+        return
+    }
+
     val customers by viewModel.customers.collectAsState()
     val products by viewModel.products.collectAsState()
     val cart by viewModel.cart.collectAsState()
