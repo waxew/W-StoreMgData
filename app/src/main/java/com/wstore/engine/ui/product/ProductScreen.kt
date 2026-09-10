@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.wstore.engine.data.model.Product
 import com.wstore.engine.profile.ProfileRuntimeStore
+import com.wstore.engine.profile.ProfileUiVariants
 import com.wstore.engine.ui.profile.mobile_store_001.product.MobileProductDetailScreen
 import com.wstore.engine.ui.profile.mobile_store_001.product.MobileProductFormScreen
 import com.wstore.engine.ui.profile.mobile_store_001.product.MobileProductListScreen
@@ -84,7 +85,7 @@ fun ProductScreen(
         }
     }
 
-    if (activeProfile.uiProfile.productCardVariant == "device_product_card") {
+    if (activeProfile.uiProfile.productCardVariant == ProfileUiVariants.DEVICE_PRODUCT_CARD) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
