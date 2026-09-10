@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "id": "book_store_001",
+  "enabled": false,
+  "identity": {
+    "name": "کتاب‌فروشی",
+    "businessType": "BOOK_STORE"
+  },
+  "modules": {
+    "customer": true,
+    "product": true,
+    "inventory": true,
+    "sales": true,
+    "invoice": true,
+    "reports": true
+  },
+  "features": {
+    "author": true,
+    "isbn": true,
+    "publisher": true,
+    "edition": true,
+    "language": true
+  },
+  "attributes": [
+    {"key":"product.author","label":"نویسنده","type":"text","required":true,"visible":true},
+    {"key":"product.isbn","label":"ISBN","type":"barcode","required":false,"visible":true},
+    {"key":"product.publisher","label":"ناشر","type":"text","required":false,"visible":true},
+    {"key":"product.edition","label":"نوبت چاپ","type":"number","required":false,"visible":true},
+    {"key":"product.language","label":"زبان","type":"option","required":false,"visible":true,"options":["فارسی","انگلیسی","عربی","ترکی","سایر"]}
+  ],
+  "uiProfile": {
+    "dashboardVariant": "book_dashboard",
+    "productCardVariant": "book_product_card",
+    "heroAssetKey": "book_dashboard_hero",
+    "navigationVariant": "book_navigation"
+  },
+  "theme": {
+    "name": "book_editorial_theme",
+    "primaryToken": "book_primary",
+    "backgroundToken": "book_background",
+    "useDynamicColor": false
+  },
+  "assets": {
+    "iconKey": "book_app_icon",
+    "logoKey": "book_logo",
+    "dashboardHeroKey": "book_dashboard_hero",
+    "emptyStateKey": "book_empty_state"
+  }
+}

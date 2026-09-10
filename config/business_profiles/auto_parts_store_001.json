@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "id": "auto_parts_store_001",
+  "enabled": false,
+  "identity": {
+    "name": "فروشگاه قطعات خودرو",
+    "businessType": "AUTO_PARTS_STORE"
+  },
+  "modules": {
+    "customer": true,
+    "product": true,
+    "inventory": true,
+    "sales": true,
+    "invoice": true,
+    "reports": true
+  },
+  "features": {
+    "oem_number": true,
+    "vehicle_compatibility": true,
+    "manufacturer": true,
+    "part_number": true,
+    "vehicle_year": true
+  },
+  "attributes": [
+    {"key":"product.brand","label":"برند قطعه","type":"text","required":false,"visible":true},
+    {"key":"product.oem_number","label":"شماره OEM","type":"serial","required":false,"visible":true},
+    {"key":"product.part_number","label":"کد فنی قطعه","type":"serial","required":true,"visible":true},
+    {"key":"product.manufacturer","label":"سازنده","type":"text","required":false,"visible":true},
+    {"key":"product.vehicle_model","label":"خودروهای سازگار","type":"text","required":false,"visible":true},
+    {"key":"product.vehicle_year","label":"سال/بازه مدل خودرو","type":"text","required":false,"visible":true}
+  ],
+  "uiProfile": {
+    "dashboardVariant": "auto_parts_dashboard",
+    "productCardVariant": "part_product_card",
+    "heroAssetKey": "auto_parts_dashboard_hero",
+    "navigationVariant": "auto_parts_navigation"
+  },
+  "theme": {
+    "name": "auto_parts_industrial_theme",
+    "primaryToken": "auto_parts_primary",
+    "backgroundToken": "auto_parts_background",
+    "useDynamicColor": false
+  },
+  "assets": {
+    "iconKey": "auto_parts_app_icon",
+    "logoKey": "auto_parts_logo",
+    "dashboardHeroKey": "auto_parts_dashboard_hero",
+    "emptyStateKey": "auto_parts_empty_state"
+  }
+}

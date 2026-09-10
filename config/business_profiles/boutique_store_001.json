@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "id": "boutique_store_001",
+  "enabled": false,
+  "identity": {
+    "name": "بوتیک پوشاک",
+    "businessType": "BOUTIQUE_STORE"
+  },
+  "modules": {
+    "customer": true,
+    "product": true,
+    "inventory": true,
+    "sales": true,
+    "invoice": true,
+    "reports": true
+  },
+  "features": {
+    "size": true,
+    "color": true,
+    "material": true,
+    "season": true,
+    "collection": true
+  },
+  "attributes": [
+    {"key":"product.brand","label":"برند","type":"text","required":false,"visible":true},
+    {"key":"product.size","label":"سایز","type":"option","required":true,"visible":true,"options":["XS","S","M","L","XL","XXL"]},
+    {"key":"product.color","label":"رنگ","type":"text","required":true,"visible":true},
+    {"key":"product.material","label":"جنس","type":"text","required":false,"visible":true},
+    {"key":"product.season","label":"فصل","type":"option","required":false,"visible":true,"options":["بهار","تابستان","پاییز","زمستان","چهارفصل"]},
+    {"key":"product.collection","label":"کالکشن","type":"text","required":false,"visible":true}
+  ],
+  "uiProfile": {
+    "dashboardVariant": "boutique_dashboard",
+    "productCardVariant": "fashion_product_card",
+    "heroAssetKey": "boutique_dashboard_hero",
+    "navigationVariant": "boutique_navigation"
+  },
+  "theme": {
+    "name": "boutique_fashion_theme",
+    "primaryToken": "boutique_primary",
+    "backgroundToken": "boutique_background",
+    "useDynamicColor": false
+  },
+  "assets": {
+    "iconKey": "boutique_app_icon",
+    "logoKey": "boutique_logo",
+    "dashboardHeroKey": "boutique_dashboard_hero",
+    "emptyStateKey": "boutique_empty_state"
+  }
+}

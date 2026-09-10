@@ -3,21 +3,24 @@ package com.wstore.engine
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import com.wstore.engine.runtime.BusinessRuntimeInitializer
+import com.wstore.engine.runtime.ApplicationRuntimeInitializer
 import com.wstore.engine.ui.navigation.AppNavHost
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
- * نقطه ورود اصلی برنامه.
- * ابتدا Business Profile فعال می‌شود و سپس Navigation Graph برنامه اجرا می‌گردد.
+ * نام فایل: MainActivity.kt
+ * ماژول: Application Entry
+ * وظیفه: راه‌اندازی Config/Profile Runtime و سپس ساخت Navigation Graph برنامه.
+ *
+ * هیچ اطلاعات ثابت برنامه یا نوع کسب‌وکار در این Activity نگهداری نمی‌شود.
  */
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(b: Bundle?) {
         super.onCreate(b)
 
-        // فعال‌سازی Profile قبل از ساخت UI و Navigation.
-        BusinessRuntimeInitializer.initialize()
+        // App Config و Business Profile قبل از ساخت UI از فایل‌های مرکزی خوانده می‌شوند.
+        ApplicationRuntimeInitializer.initialize(applicationContext)
 
         setContent {
             AppNavHost()

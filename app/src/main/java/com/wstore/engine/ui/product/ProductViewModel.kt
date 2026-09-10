@@ -5,7 +5,11 @@ import androidx.lifecycle.viewModelScope
 import com.wstore.engine.data.local.entity.ProductEntity
 import com.wstore.engine.data.model.Product
 import com.wstore.engine.data.model.ProductDeleteResult
+import com.wstore.engine.data.repository.ProductAttributeRepository
+import com.wstore.engine.data.repository.ProductProfileRepository
 import com.wstore.engine.data.repository.ProductRepository
+import com.wstore.engine.profile.ProfileAttributeDefinition
+import com.wstore.engine.profile.ProfileRuntimeStore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,15 +19,23 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 /**
- * ViewModel ماژول کالا.
+ * نام فایل: ProductViewModel.kt
+ * ماژول: Product
+ * وظیفه: مدیریت لیست کالا، CRUD پایه و Attributeهای پویا بر اساس Business Profile فعال.
  *
- * لیست کالاها از Room به‌صورت Flow دریافت می‌شود. جستجو روی لیست زنده اعمال می‌شود و
- * حذف کالا فقط از مسیر محافظت‌شده Repository انجام می‌گیرد.
+ * ذخیره Product و Dynamic Attributeها از ProductProfileRepository و به شکل اتمیک انجام می‌شود.
+ * حذف کالا همچنان فقط از مسیر محافظت‌شده ProductRepository عبور می‌کند تا تاریخچه تجاری حفظ شود.
  */
 @HiltViewModel
 class ProductViewModel @Inject constructor(
-    private val repository: ProductRepository
+    private val repository: ProductRepository,
+    private val attributeRepository: ProductAttributeRepository,
+    private val productProfileRepository: ProductProfileRepository
 ) : ViewModel() {
+
+    /** Schema فیلدهای اختصاصی از Profile فعال می‌آید و نام هیچ صنفی اینجا Hard Code نشده است. */
+    val attributeDefinitions: List<ProfileAttributeDefinition> =
+        ProfileRuntimeStore.visibleAttributes()
 
     private val _allProducts = MutableStateFlow<List<Product>>(emptyList())
 
@@ -35,6 +47,10 @@ class ProductViewModel @Inject constructor(
 
     private val _editingProduct = MutableStateFlow<Product?>(null)
     val editingProduct: StateFlow<Product?> = _editingProduct.asStateFlow()
+
+    private val _editingAttributeValues = MutableStateFlow<Map<String, String>>(emptyMap())
+    val editingAttributeValues: StateFlow<Map<String, String>> =
+        _editingAttributeValues.asStateFlow()
 
     private val _message = MutableStateFlow<String?>(null)
     val message: StateFlow<String?> = _message.asStateFlow()
@@ -60,8 +76,8 @@ class ProductViewModel @Inject constructor(
             is ProductEvent.UpdateProduct -> updateProduct(event)
             is ProductEvent.DeleteProduct -> deleteProduct(event.product)
             is ProductEvent.Search -> search(event.query)
-            is ProductEvent.StartEdit -> _editingProduct.value = event.product
-            ProductEvent.CancelEdit -> _editingProduct.value = null
+            is ProductEvent.StartEdit -> startEdit(event.product)
+            ProductEvent.CancelEdit -> cancelEdit()
             ProductEvent.DismissMessage -> _message.value = null
         }
     }
@@ -70,7 +86,8 @@ class ProductViewModel @Inject constructor(
         val validationError = validateProductInput(
             name = event.name,
             price = event.price,
-            stock = event.stock
+            stock = event.stock,
+            attributes = event.attributes
         )
         if (validationError != null) {
             _message.value = validationError
@@ -79,17 +96,19 @@ class ProductViewModel @Inject constructor(
 
         viewModelScope.launch {
             runCatching {
-                repository.add(
-                    ProductEntity(
+                productProfileRepository.add(
+                    product = ProductEntity(
                         name = event.name.trim(),
                         code = event.code.trim(),
                         category = event.category.trim(),
                         price = event.price,
                         stock = event.stock
-                    )
+                    ),
+                    attributes = event.attributes,
+                    definitions = attributeDefinitions
                 )
             }.onSuccess {
-                _message.value = "کالا با موفقیت ثبت شد."
+                _message.value = "کالا و مشخصات اختصاصی آن با موفقیت ثبت شد."
             }.onFailure { error ->
                 _message.value = error.message ?: "ثبت کالا انجام نشد."
             }
@@ -100,7 +119,8 @@ class ProductViewModel @Inject constructor(
         val validationError = validateProductInput(
             name = event.name,
             price = event.price,
-            stock = 0
+            stock = 0,
+            attributes = event.attributes
         )
         if (validationError != null) {
             _message.value = validationError
@@ -112,21 +132,46 @@ class ProductViewModel @Inject constructor(
                 val current = repository.getById(event.id)
                     ?: error("کالای انتخاب‌شده در دیتابیس پیدا نشد.")
 
-                repository.update(
-                    current.copy(
+                productProfileRepository.update(
+                    product = current.copy(
                         name = event.name.trim(),
                         code = event.code.trim(),
                         category = event.category.trim(),
                         price = event.price
-                    )
+                    ),
+                    attributes = event.attributes,
+                    definitions = attributeDefinitions
                 )
             }.onSuccess {
-                _editingProduct.value = null
-                _message.value = "اطلاعات کالا ویرایش شد."
+                cancelEdit()
+                _message.value = "اطلاعات کالا و مشخصات اختصاصی آن ویرایش شد."
             }.onFailure { error ->
                 _message.value = error.message ?: "ویرایش کالا انجام نشد."
             }
         }
+    }
+
+    private fun startEdit(product: Product) {
+        _editingProduct.value = product
+        _editingAttributeValues.value = emptyMap()
+
+        viewModelScope.launch {
+            runCatching {
+                attributeRepository.getValues(product.id)
+            }.onSuccess { values ->
+                // اگر کاربر در این فاصله کالای دیگری را انتخاب کرده باشد مقدار قبلی اعمال نمی‌شود.
+                if (_editingProduct.value?.id == product.id) {
+                    _editingAttributeValues.value = values
+                }
+            }.onFailure { error ->
+                _message.value = error.message ?: "خواندن مشخصات اختصاصی کالا انجام نشد."
+            }
+        }
+    }
+
+    private fun cancelEdit() {
+        _editingProduct.value = null
+        _editingAttributeValues.value = emptyMap()
     }
 
     private fun deleteProduct(product: Product) {
@@ -179,14 +224,37 @@ class ProductViewModel @Inject constructor(
     private fun validateProductInput(
         name: String,
         price: Double,
-        stock: Int
+        stock: Int,
+        attributes: Map<String, String>
     ): String? {
-        return when {
-            name.isBlank() -> "نام کالا الزامی است."
-            price < 0.0 -> "قیمت کالا نمی‌تواند منفی باشد."
-            stock < 0 -> "موجودی اولیه نمی‌تواند منفی باشد."
-            else -> null
+        if (name.isBlank()) return "نام کالا الزامی است."
+        if (price < 0.0) return "قیمت کالا نمی‌تواند منفی باشد."
+        if (stock < 0) return "موجودی اولیه نمی‌تواند منفی باشد."
+
+        attributeDefinitions.forEach { definition ->
+            val value = attributes[definition.key].orEmpty().trim()
+            if (definition.required && value.isBlank()) {
+                return "فیلد «${definition.label}» الزامی است."
+            }
+            if (value.isBlank()) return@forEach
+
+            when (definition.type) {
+                "number" -> if (value.toLongOrNull() == null) {
+                    return "مقدار «${definition.label}» باید عدد صحیح باشد."
+                }
+                "decimal" -> if (value.toDoubleOrNull() == null) {
+                    return "مقدار «${definition.label}» باید عدد معتبر باشد."
+                }
+                "option" -> if (value !in definition.options) {
+                    return "گزینه انتخاب‌شده برای «${definition.label}» معتبر نیست."
+                }
+                "boolean" -> if (value != "true" && value != "false") {
+                    return "مقدار «${definition.label}» معتبر نیست."
+                }
+            }
         }
+
+        return null
     }
 
     private fun ProductEntity.toModel(): Product = Product(

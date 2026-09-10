@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "id": "home_appliance_store_001",
+  "enabled": false,
+  "identity": {
+    "name": "فروشگاه لوازم خانگی",
+    "businessType": "HOME_APPLIANCE_STORE"
+  },
+  "modules": {
+    "customer": true,
+    "product": true,
+    "inventory": true,
+    "sales": true,
+    "invoice": true,
+    "reports": true,
+    "warranty": true
+  },
+  "features": {
+    "model": true,
+    "serial": true,
+    "energy_rating": true,
+    "warranty": true,
+    "service": true
+  },
+  "attributes": [
+    {"key":"product.brand","label":"برند","type":"text","required":true,"visible":true},
+    {"key":"product.model","label":"مدل","type":"text","required":true,"visible":true},
+    {"key":"product.serial","label":"شماره سریال","type":"serial","required":false,"visible":true},
+    {"key":"product.energy_rating","label":"رده انرژی","type":"option","required":false,"visible":true,"options":["A+++","A++","A+","A","B","C"]},
+    {"key":"product.warranty_months","label":"مدت گارانتی (ماه)","type":"number","required":false,"visible":true},
+    {"key":"product.voltage","label":"ولتاژ/مشخصات برق","type":"text","required":false,"visible":true}
+  ],
+  "uiProfile": {
+    "dashboardVariant": "appliance_dashboard",
+    "productCardVariant": "appliance_product_card",
+    "heroAssetKey": "appliance_dashboard_hero",
+    "navigationVariant": "appliance_navigation"
+  },
+  "theme": {
+    "name": "appliance_clean_theme",
+    "primaryToken": "appliance_primary",
+    "backgroundToken": "appliance_background",
+    "useDynamicColor": false
+  },
+  "assets": {
+    "iconKey": "appliance_app_icon",
+    "logoKey": "appliance_logo",
+    "dashboardHeroKey": "appliance_dashboard_hero",
+    "emptyStateKey": "appliance_empty_state"
+  }
+}

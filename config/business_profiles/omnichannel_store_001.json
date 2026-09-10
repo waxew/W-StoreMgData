@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "id": "omnichannel_store_001",
+  "enabled": false,
+  "identity": {
+    "name": "فروشگاه چندکاناله",
+    "businessType": "OMNICHANNEL_STORE"
+  },
+  "modules": {
+    "customer": true,
+    "product": true,
+    "inventory": true,
+    "sales": true,
+    "invoice": true,
+    "reports": true
+  },
+  "features": {
+    "multi_inventory": true,
+    "online_sale": true,
+    "pos": true,
+    "crm": true,
+    "channel_sync": true,
+    "fulfillment": true
+  },
+  "attributes": [
+    {"key":"product.sku","label":"SKU","type":"serial","required":true,"visible":true},
+    {"key":"product.barcode","label":"بارکد","type":"barcode","required":false,"visible":true},
+    {"key":"product.vendor","label":"تأمین‌کننده","type":"text","required":false,"visible":true},
+    {"key":"product.channel","label":"کانال فروش","type":"option","required":false,"visible":true,"options":["حضوری","وب‌سایت","مارکت‌پلیس","شبکه اجتماعی","سایر"]},
+    {"key":"product.warehouse","label":"انبار","type":"text","required":false,"visible":true},
+    {"key":"product.fulfillment","label":"روش ارسال/تحویل","type":"option","required":false,"visible":true,"options":["فروشگاه","انبار مرکزی","ارسال مستقیم تأمین‌کننده"]},
+    {"key":"product.external_id","label":"شناسه خارجی","type":"serial","required":false,"visible":true}
+  ],
+  "uiProfile": {
+    "dashboardVariant": "omnichannel_dashboard",
+    "productCardVariant": "omnichannel_product_card",
+    "heroAssetKey": "omnichannel_dashboard_hero",
+    "navigationVariant": "omnichannel_navigation"
+  },
+  "theme": {
+    "name": "omnichannel_business_theme",
+    "primaryToken": "omnichannel_primary",
+    "backgroundToken": "omnichannel_background",
+    "useDynamicColor": false
+  },
+  "assets": {
+    "iconKey": "omnichannel_app_icon",
+    "logoKey": "omnichannel_logo",
+    "dashboardHeroKey": "omnichannel_dashboard_hero",
+    "emptyStateKey": "omnichannel_empty_state"
+  }
+}

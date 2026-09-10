@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "description": "Business Profile Schema - White Label Engine",
+  "profileTemplate": {
+    "id": "profile_id",
+    "enabled": false,
+    "identity": {
+      "name": "نام کسب‌وکار",
+      "businessType": "BUSINESS_TYPE"
+    },
+    "modules": {
+      "customer": true,
+      "product": true,
+      "inventory": true,
+      "sales": true,
+      "invoice": true,
+      "reports": true
+    },
+    "features": {
+      "example_feature": true
+    },
+    "attributes": [
+      {
+        "key": "example.attribute",
+        "label": "عنوان نمایشی",
+        "type": "text",
+        "required": false,
+        "visible": true,
+        "options": []
+      }
+    ],
+    "uiProfile": {
+      "dashboardVariant": "default_dashboard",
+      "productCardVariant": "default_product_card",
+      "heroAssetKey": "dashboard_hero",
+      "navigationVariant": "default"
+    },
+    "theme": {
+      "name": "default_theme",
+      "primaryToken": "primary",
+      "backgroundToken": "background",
+      "useDynamicColor": false
+    },
+    "assets": {
+      "iconKey": "app_icon",
+      "logoKey": "app_logo",
+      "dashboardHeroKey": "dashboard_hero",
+      "emptyStateKey": "empty_state"
+    }
+  },
+  "supportedAttributeTypes": [
+    "text",
+    "number",
+    "decimal",
+    "date",
+    "boolean",
+    "option",
+    "barcode",
+    "serial"
+  ]
+}

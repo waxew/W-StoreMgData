@@ -1,3 +1,5 @@
+import groovy.json.JsonSlurper
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -6,16 +8,45 @@ plugins {
     id("com.google.dagger.hilt.android")
 }
 
+/*
+ * App Config مرکزی در مرحله Build نیز خوانده می‌شود تا نام پکیج و نسخه در کدهای مختلف
+ * تکرار نشوند. پوشه config همچنین به Assets اضافه می‌شود تا همان فایل‌ها در Runtime خوانده شوند.
+ */
+val appConfigFile = rootProject.file("config/app_config.json")
+require(appConfigFile.exists()) {
+    "فایل config/app_config.json پیدا نشد."
+}
+
+@Suppress("UNCHECKED_CAST")
+val appConfigRoot = JsonSlurper().parse(appConfigFile) as Map<String, Any?>
+@Suppress("UNCHECKED_CAST")
+val appIdentity = appConfigRoot["app"] as Map<String, Any?>
+
+val configuredAppName = appIdentity.getValue("name").toString()
+val configuredApplicationId = appIdentity.getValue("applicationId").toString()
+val configuredVersionCode = (appIdentity.getValue("versionCode") as Number).toInt()
+val configuredVersionName = appIdentity.getValue("versionName").toString()
+
 android {
     namespace = "com.wstore.engine"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.wstore.engine"
+        applicationId = configuredApplicationId
         minSdk = 26
         targetSdk = 35
-        versionCode = 10000
-        versionName = "1.0.0"
+        versionCode = configuredVersionCode
+        versionName = configuredVersionName
+
+        // نام نمایشی برنامه نیز از همان App Config تولید می‌شود.
+        resValue("string", "app_name", configuredAppName)
+    }
+
+    sourceSets {
+        getByName("main") {
+            // یک منبع واحد برای App Config و تمام Business Profileها.
+            assets.srcDir(rootProject.file("config"))
+        }
     }
 
     compileOptions {

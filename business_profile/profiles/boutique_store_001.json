@@ -1,0 +1,8 @@
+{
+  "id": "boutique_store_001",
+  "name": "فروشگاه بوتیک",
+  "enabled": false,
+  "modules": ["customer", "product", "inventory", "sales", "invoice"],
+  "features": ["size", "color", "material", "collection"],
+  "uiProfile": "boutique_dashboard"
+}

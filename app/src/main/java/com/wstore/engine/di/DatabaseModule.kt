@@ -172,6 +172,34 @@ private val MIGRATION_4_5 = object : Migration(4, 5) {
     }
 }
 
+/**
+ * مهاجرت نسخه 5 به 6.
+ * جدول مقادیر Dynamic Attribute به صورت افزایشی اضافه می‌شود.
+ * هیچ ستون یا جدول قبلی حذف یا بازسازی نمی‌شود.
+ */
+private val MIGRATION_5_6 = object : Migration(5, 6) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL(
+            """
+            CREATE TABLE IF NOT EXISTS `product_attribute_values` (
+                `productId` INTEGER NOT NULL,
+                `attributeKey` TEXT NOT NULL,
+                `value` TEXT NOT NULL,
+                `updatedAt` INTEGER NOT NULL,
+                PRIMARY KEY(`productId`, `attributeKey`),
+                FOREIGN KEY(`productId`) REFERENCES `products`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE
+            )
+            """.trimIndent()
+        )
+        db.execSQL(
+            "CREATE INDEX IF NOT EXISTS `index_product_attribute_values_productId` ON `product_attribute_values` (`productId`)"
+        )
+        db.execSQL(
+            "CREATE INDEX IF NOT EXISTS `index_product_attribute_values_attributeKey` ON `product_attribute_values` (`attributeKey`)"
+        )
+    }
+}
+
 @Module
 @InstallIn(SingletonComponent::class)
 object DatabaseModule {
@@ -190,7 +218,8 @@ object DatabaseModule {
                 MIGRATION_1_2,
                 MIGRATION_2_3,
                 MIGRATION_3_4,
-                MIGRATION_4_5
+                MIGRATION_4_5,
+                MIGRATION_5_6
             )
             .build()
     }
@@ -199,6 +228,11 @@ object DatabaseModule {
     fun provideProductDao(
         database: AppDatabase
     ) = database.productDao()
+
+    @Provides
+    fun provideProductAttributeDao(
+        database: AppDatabase
+    ) = database.productAttributeDao()
 
     @Provides
     fun provideCustomerDao(
