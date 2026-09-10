@@ -1,0 +1,8 @@
+{
+  "id": "omnichannel_001",
+  "name": "فروشگاه چندکاناله",
+  "modules": ["product", "customer", "crm", "inventory", "sales", "invoice", "shipping", "reports"],
+  "attributes": ["sku", "channel", "warehouse", "barcode", "supplier", "shipping_status"],
+  "ui": "omnichannel_dashboard",
+  "theme": "omnichannel_theme"
+}
