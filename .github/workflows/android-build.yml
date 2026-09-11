@@ -28,5 +28,11 @@ jobs:
       - name: Build Debug APK
         run: ./gradlew --no-daemon assembleDebug
 
+      - name: Upload Debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: w-store-debug-apk
+          path: app/build/outputs/apk/debug/*.apk
+
       - name: Build Release APK Check
         run: ./gradlew --no-daemon assembleRelease
